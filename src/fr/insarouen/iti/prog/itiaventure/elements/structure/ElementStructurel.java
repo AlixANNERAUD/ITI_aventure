@@ -8,4 +8,8 @@ public class ElementStructurel extends Entite {
     public ElementStructurel(String nom, Monde monde) {
         super(nom, monde);
     }
+
+    public String toString() {
+        return String.format("ElementStructurel: %s\n%s", this.getNom(), this.getMonde().toString());
+    }
 }

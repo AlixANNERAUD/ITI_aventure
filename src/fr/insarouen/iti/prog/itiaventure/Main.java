@@ -1,7 +1,7 @@
 package fr.insarouen.iti.prog.itiaventure;
 
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
-
+import fr.insarouen.iti.prog.itiaventure.elements.structure.ElementStructurel;
 public class Main{ 
 
     public static void main(String[] args){
@@ -16,5 +16,9 @@ public class Main{
         System.out.println(entite == entite2);
         System.out.println(entite == entite);
         System.out.println(entite == entite3);
+
+        ElementStructurel elementStructurel = new ElementStructurel("e3", monde);
+
+        System.out.println(elementStructurel.toString());
     }
 }

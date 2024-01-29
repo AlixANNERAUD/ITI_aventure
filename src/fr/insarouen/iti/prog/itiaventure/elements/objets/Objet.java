@@ -12,4 +12,8 @@ public class Objet extends Entite {
     public boolean estDeplacable() {
         return false;
     }
+
+    public String toString() {
+        return String.format("Objet: %s\n%s", this.getNom(), this.getMonde().toString());
+    }
 }
