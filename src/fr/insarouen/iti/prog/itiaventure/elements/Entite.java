@@ -1,24 +1,22 @@
 package fr.insarouen.iti.prog.itiaventure.elements;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import fr.insarouen.iti.prog.itiaventure.Monde;
 
 public class Entite {
-    
+
     private final Monde monde;
     private final String nom;
 
-    public Entite(String nom){
-        this.monde = new Monde();
+    public Entite(String nom, Monde monde) {
+        this.monde = monde;
         this.nom = nom;
     }
 
-    public String getNom(){
+    public String getNom() {
         return this.nom;
     }
 
-    public Monde getMonde(){
+    public Monde getMonde() {
         return this.monde;
     }
 
@@ -30,7 +28,7 @@ public class Entite {
         if ((o == null) || (this.getClass() != o.getClass())) {
             return false;
         }
-        Entite e = (Entite)o;
+        Entite e = (Entite) o;
         return this.nom == e.nom && this.monde == e.monde;
     }
 
