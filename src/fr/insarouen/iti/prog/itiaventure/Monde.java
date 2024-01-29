@@ -7,4 +7,10 @@ public class Monde {
    public String toString() {
         return String.format("");
    }
+
+   public String getNom() {
+
+   }
+
+   public 
 }
