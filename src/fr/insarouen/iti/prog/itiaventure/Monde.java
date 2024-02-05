@@ -2,11 +2,25 @@ package fr.insarouen.iti.prog.itiaventure;
 
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
 
+/**
+ * Classe représentant un monde.
+ */
 public class Monde {
 
+   /**
+    * Tableau des entités du monde.
+    */
    private Entite[] entites;
+
+   /**
+    * Nom du monde.
+    */
    private final String nom;
 
+   /**
+    * Constructeur Monde.
+    * @param nom Nom du monde.
+    */
    public Monde(String nom) {
       this.nom = nom;
       this.entites = new Entite[0];
@@ -24,10 +38,19 @@ public class Monde {
       return stringBuilder.toString();
    }
 
+   /**
+    * Retourne le nom du monde.
+    * @return Nom du monde.
+    */
    public String getNom() {
       return this.nom;
    }
 
+   /**
+    * Retourne l'entité du monde correspondant au nom passé en paramètre.
+    * @param nomEntite Nom de l'entité.
+    * @return Entité correspondant au nom passé en paramètre.
+    */
    public Entite getEntite(String nomEntite) {
 
       for (int i = 0; i < this.entites.length; i++) {
@@ -38,6 +61,10 @@ public class Monde {
       return null;
    }
 
+   /**
+    * Ajoute une entité au monde.
+    * @param entite Entité à ajouter.
+    */
    public void ajouter(Entite entite) {
       Entite[] entites = new Entite[this.entites.length + 1];
 

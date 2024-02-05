@@ -2,11 +2,26 @@ package fr.insarouen.iti.prog.itiaventure.elements;
 
 import fr.insarouen.iti.prog.itiaventure.Monde;
 
+/**
+ * Classe générique pour les entités.
+ */
 public abstract class Entite {
 
+    /**
+     * Monde dans lequel se trouve l'entité.
+     */
     private final Monde monde;
+
+    /**
+     * Nom de l'entité.
+     */
     private final String nom;
 
+    /**
+     * Constructeur Entite.
+     * @param nom Nom de l'entité.
+     * @param monde Monde dans lequel se trouve l'entité.
+     */
     public Entite(String nom, Monde monde) {
         this.monde = monde;
         this.nom = nom;
@@ -14,10 +29,18 @@ public abstract class Entite {
         monde.ajouter(this);
     }
 
+    /**
+     * Retourne le nom de l'entité.
+     * @return Nom de l'entité.
+     */
     public String getNom() {
         return this.nom;
     }
 
+    /**
+     * Retourne le monde dans lequel se trouve l'entité.
+     * @return Monde dans lequel se trouve l'entité.
+     */
     public Monde getMonde() {
         return this.monde;
     }
