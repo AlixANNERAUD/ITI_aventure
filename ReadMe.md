@@ -11,4 +11,5 @@
 This project is made by:
 - Alix ANNERAUD
 - Toaba OUATHRANI
+
 This project under the [MIT license](License).
