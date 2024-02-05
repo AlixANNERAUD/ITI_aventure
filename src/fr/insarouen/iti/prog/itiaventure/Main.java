@@ -2,6 +2,7 @@ package fr.insarouen.iti.prog.itiaventure;
 
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.ElementStructurel;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 
 public class Main {
@@ -22,6 +23,11 @@ public class Main {
         public ObjetTest(String nom, Monde monde) {
             super(nom, monde);
         }
+
+        @Override
+        public boolean estDeplacable() {
+            return true;
+        }
     }
 
     public static void main(String[] args) {
@@ -39,5 +45,10 @@ public class Main {
         ElementStructurel elementStructurel = new ElementStructurelTest("e3", monde);
 
         System.out.println(elementStructurel.toString());
+   
+        Piece piece = new Piece("p4", monde);
+        piece.deposer(objet);
+
+        System.out.println(piece.toString());
     }
 }

@@ -9,9 +9,8 @@ public abstract class Objet extends Entite {
         super(nom, monde);
     }
 
-    public boolean estDeplacable() {
-        return false;
-    }
+    public abstract boolean estDeplacable();
+    
 
     public String toString() {
         return String.format("Objet: %s", this.getNom());

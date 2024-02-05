@@ -31,7 +31,7 @@ public class Monde {
    public Entite getEntite(String nomEntite) {
 
       for (int i = 0; i < this.entites.length; i++) {
-         if (this.entites[i].getNom() == nomEntite) {
+         if (this.entites[i].getNom().equals(nomEntite)) {
             return this.entites[i];
          }
       }
@@ -48,5 +48,6 @@ public class Monde {
       entites[this.entites.length] = entite;
 
       this.entites = entites;
+
    }
 }
