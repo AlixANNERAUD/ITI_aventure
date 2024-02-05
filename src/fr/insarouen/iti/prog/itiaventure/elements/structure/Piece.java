@@ -110,6 +110,10 @@ public class Piece extends ElementStructurel {
             stringBuilder.append("\n\t-> ");
             stringBuilder.append(this.objets[i].toString());
         }
+        for (int i = 0; i < this.vivants.length; i++) {
+            stringBuilder.append("\n\t-> ");
+            stringBuilder.append(this.vivants[i].toString());
+        }
         return stringBuilder.toString();
     }
 

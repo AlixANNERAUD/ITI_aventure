@@ -46,14 +46,18 @@ public class Main {
         ElementStructurel elementStructurel = new ElementStructurelTest("e3", monde);
 
         System.out.println(elementStructurel.toString());
-   
         Piece piece = new Piece("p4", monde);
-        piece.deposer(objet);
-
-        System.out.println(piece.toString());
-
         Vivant vivant = new Vivant("Jean-Jacques", monde, 2,3, piece, objet);
 
-        System.out.println(vivant.toString());        
+        System.out.println(vivant.toString()); 
+
+        
+        piece.deposer(objet);
+        piece.entrer(vivant);
+        System.out.println(piece.toString());
+
+        
+        
+        
     }
 }
