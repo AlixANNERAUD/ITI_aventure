@@ -14,6 +14,6 @@ public class PiedDeBiche extends Objet {
     }
 
     public String toString() {
-        return String.format("PiedDeBiche: %s\n%s", this.getNom(), this.getMonde().toString());
+        return String.format("PiedDeBiche: %s", this.getNom());
     }
 }

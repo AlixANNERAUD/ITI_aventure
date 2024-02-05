@@ -2,7 +2,7 @@ package fr.insarouen.iti.prog.itiaventure.elements;
 
 import fr.insarouen.iti.prog.itiaventure.Monde;
 
-public class Entite {
+public abstract class Entite {
 
     private final Monde monde;
     private final String nom;
@@ -23,7 +23,7 @@ public class Entite {
     }
 
     public String toString() {
-        return String.format("Entite : %s \n %s", nom, monde.toString());
+        return String.format("Entite : %s", nom);
     }
 
     public boolean equals(Object o) {
