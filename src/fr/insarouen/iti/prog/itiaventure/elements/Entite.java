@@ -10,6 +10,8 @@ public class Entite {
     public Entite(String nom, Monde monde) {
         this.monde = monde;
         this.nom = nom;
+
+        monde.ajouter(this);
     }
 
     public String getNom() {
