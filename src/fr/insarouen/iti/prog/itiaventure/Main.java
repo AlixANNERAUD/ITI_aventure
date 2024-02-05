@@ -3,6 +3,7 @@ package fr.insarouen.iti.prog.itiaventure;
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.ElementStructurel;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
+import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 
 public class Main {
@@ -50,5 +51,9 @@ public class Main {
         piece.deposer(objet);
 
         System.out.println(piece.toString());
+
+        Vivant vivant = new Vivant("Jean-Jacques", monde, 2,3, piece, objet);
+
+        System.out.println(vivant.toString());        
     }
 }
