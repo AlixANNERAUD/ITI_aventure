@@ -10,7 +10,7 @@ public class Monde {
    /**
     * Tableau des entités du monde.
     */
-   private Entite[] entites;
+   private Entite[] entites = new Entite[0];
 
    /**
     * Nom du monde.
@@ -23,7 +23,6 @@ public class Monde {
     */
    public Monde(String nom) {
       this.nom = nom;
-      this.entites = new Entite[0];
    }
 
    public String toString() {
