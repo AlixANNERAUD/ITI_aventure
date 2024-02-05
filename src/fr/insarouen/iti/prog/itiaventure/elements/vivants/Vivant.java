@@ -7,10 +7,36 @@ import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 
 public class Vivant extends Entite {
 
-    private int pointVie, pointForce;
+    /**
+     * Points de vie du vivant.
+     */
+    private int pointVie;
+
+    /**
+     * Points de force du vivant.
+     */
+    private int pointForce;
+
+    /**
+     * Pièce dans laquelle se trouve le vivant.
+     */
     private Piece piece;
+
+    /**
+     * Tableau contenant les objets du vivant.
+     */
     private Objet[] objets;
 
+    /**
+     * Constructeur Vivant.
+     * 
+     * @param nom        Nom du vivant.
+     * @param monde      Monde dans lequel se trouve le vivant.
+     * @param pointVie   Points de vie du vivant.
+     * @param pointForce Points de force du vivant.
+     * @param piece      Pièce dans laquelle se trouve le vivant.
+     * @param objets     Objets du vivant.
+     */
     public Vivant(String nom, Monde monde, int pointVie, int pointForce, Piece piece, Objet... objets) {
         super(nom, monde);
         this.pointVie = pointVie;
@@ -18,15 +44,19 @@ public class Vivant extends Entite {
         this.piece = piece;
         this.objets = objets;
     }
+
     /**
-     * depose un objet dans le vivant à partir d'un objet
+     * Depose un objet dans le vivant à partir d'un objet
+     * 
      * @param objet
      */
     public void deposer(Objet objet) {
         this.deposer(objet.getNom());
     }
+
     /**
-     * depose un objet dans le vivant à partir du nom de l'objet
+     * Depose un objet dans le vivant à partir du nom de l'objet
+     * 
      * @param nomObjet
      */
     public void deposer(String nomObjet) {
@@ -47,44 +77,56 @@ public class Vivant extends Entite {
             this.objets = objets;
         }
     }
+
     /**
-     * permet de donner tous les objets appartenant à un vivant.
-     * @return Objet[], un tableau contenant les objets du viviants
+     * Permet de donner tous les objets appartenant à un vivant.
+     * 
+     * @return Objet[], un tableau contenant les objets du vivants
      */
     public Objet[] getObjets() {
         return this.objets.clone();
     }
+
     /**
-     * nous donne la piece dans laquel se trouve le vivant
+     * Renvoi donne la piece dans laquelle se trouve le vivant
+     * 
      * @return Piece
      */
     public Piece getPiece() {
         return this.piece;
     }
+
     /**
-     * Retourne les points de vie du vivant.
+     * Renvoi les points de vie du vivant.
+     * 
      * @return int
      */
     public int getPointVie() {
         return this.pointVie;
     }
+
     /**
-     * retourne les points de force du vivant
+     * Renvoi les points de force du vivant
+     * 
      * @return int
      */
     public int getPointForce() {
         return this.pointForce;
     }
+
     /**
      * Indique si l'objet est contenu dans le vivant à partir de l'objet.
+     * 
      * @param objet
      * @return Boolean
      */
     public Boolean possede(Objet objet) {
         return this.possede(objet.getNom());
     }
+
     /**
-     * indique si l'objet est contenu dans le vivant à partir du nom de l'objet
+     * Indique si l'objet est contenu dans le vivant à partir du nom de l'objet
+     * 
      * @param nomObjet
      * @return Boolean
      */
@@ -96,8 +138,11 @@ public class Vivant extends Entite {
         }
         return false;
     }
+
     /**
-     * Permet de prendre un objet d'une piece et l'assimilé au vivant à partir de son nom.
+     * Permet de prendre un objet d'une piece et l'assimilé au vivant à partir de
+     * son nom.
+     * 
      * @param nomObjet
      */
     public void prendre(String nomObjet) {
@@ -117,8 +162,11 @@ public class Vivant extends Entite {
 
         this.objets = objets;
     }
+
     /**
-     * Permet de prendre un objet d'une piece et l'assimilé au vivant à partir de l'objet.
+     * Permet de prendre un objet d'une piece et l'assimilé au vivant à partir de
+     * l'objet.
+     * 
      * @param objet
      */
     public void prendre(Objet objet) {
