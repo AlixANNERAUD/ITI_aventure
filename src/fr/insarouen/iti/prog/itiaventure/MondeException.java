@@ -6,7 +6,7 @@ public class MondeException extends ITIAventureException {
         super(message);
     }
 
-    public MondeExeption() { 
-        
+    public MondeException() { 
+        super();
     }
 }

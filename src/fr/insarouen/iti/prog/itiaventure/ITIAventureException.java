@@ -6,6 +6,7 @@ public class ITIAventureException extends Exception {
         super(message);
     }
 
-    public ITIAventureException() {    
+    public ITIAventureException() { 
+        super();
     }
 }
