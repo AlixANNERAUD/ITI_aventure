@@ -1,6 +1,8 @@
 package fr.insarouen.iti.prog.itiaventure.elements;
 
+import fr.insarouen.iti.prog.itiaventure.EntiteDejaDansUnAutreMondeException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
+import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 
 /**
  * Classe générique pour les entités.
@@ -19,18 +21,24 @@ public abstract class Entite {
 
     /**
      * Constructeur Entite.
-     * @param nom Nom de l'entité.
+     * 
+     * @param nom   Nom de l'entité.
      * @param monde Monde dans lequel se trouve l'entité.
      */
-    public Entite(String nom, Monde monde) {
+    public Entite(String nom, Monde monde)
+            throws NomDEntiteDejaUtiliseDansLeMondeException {
         this.monde = monde;
         this.nom = nom;
-
-        monde.ajouter(this);
+        try {
+            monde.ajouter(this);
+        } catch (EntiteDejaDansUnAutreMondeException e) {
+            throw new Error(e.toString());
+        }
     }
 
     /**
      * Retourne le nom de l'entité.
+     * 
      * @return Nom de l'entité.
      */
     public String getNom() {
@@ -39,6 +47,7 @@ public abstract class Entite {
 
     /**
      * Retourne le monde dans lequel se trouve l'entité.
+     * 
      * @return Monde dans lequel se trouve l'entité.
      */
     public Monde getMonde() {

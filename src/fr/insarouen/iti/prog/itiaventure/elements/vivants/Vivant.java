@@ -1,8 +1,11 @@
 package fr.insarouen.iti.prog.itiaventure.elements.vivants;
 
 import fr.insarouen.iti.prog.itiaventure.Monde;
+import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.ObjetNonDeplacableException;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.ObjetAbsentDeLaPieceException;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 
 public class Vivant extends Entite {
@@ -37,7 +40,8 @@ public class Vivant extends Entite {
      * @param piece      Pièce dans laquelle se trouve le vivant.
      * @param objets     Objets du vivant.
      */
-    public Vivant(String nom, Monde monde, int pointVie, int pointForce, Piece piece, Objet... objets) {
+    public Vivant(String nom, Monde monde, int pointVie, int pointForce, Piece piece, Objet... objets)
+            throws NomDEntiteDejaUtiliseDansLeMondeException {
         super(nom, monde);
         this.pointVie = pointVie;
         this.pointForce = pointForce;
@@ -50,7 +54,7 @@ public class Vivant extends Entite {
      * 
      * @param objet
      */
-    public void deposer(Objet objet) {
+    public void deposer(Objet objet) throws ObjetNonPossedeParLeVivantException {
         this.deposer(objet.getNom());
     }
 
@@ -59,7 +63,13 @@ public class Vivant extends Entite {
      * 
      * @param nomObjet
      */
-    public void deposer(String nomObjet) {
+    public void deposer(String nomObjet) throws ObjetNonPossedeParLeVivantException {
+
+        if (!this.possede(nomObjet)) {
+            throw new ObjetNonPossedeParLeVivantException(
+                    String.format("Le vivant %s ne possède pas l'objet %s pour le déposer dans la pièce.",
+                            this.getNom(), nomObjet));
+        }
         Objet[] objets = new Objet[this.objets.length - 1];
         boolean trouve = false;
 
@@ -145,7 +155,7 @@ public class Vivant extends Entite {
      * 
      * @param nomObjet
      */
-    public void prendre(String nomObjet) {
+    public void prendre(String nomObjet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
         if (this.piece.contientObjet(nomObjet)) {
             return;
         }
@@ -169,7 +179,7 @@ public class Vivant extends Entite {
      * 
      * @param objet
      */
-    public void prendre(Objet objet) {
+    public void prendre(Objet objet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
         this.prendre(objet.getNom());
     }
 

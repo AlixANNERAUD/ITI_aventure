@@ -9,4 +9,8 @@ public class ITIAventureException extends Exception {
     public ITIAventureException() { 
         super();
     }
+
+    public String toString() {
+        return String.format("ITIAventureException: %s : %s", this.getClass().getName(), this.getMessage());
+    }
 }

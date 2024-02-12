@@ -19,6 +19,7 @@ public class Monde {
 
    /**
     * Constructeur Monde.
+    * 
     * @param nom Nom du monde.
     */
    public Monde(String nom) {
@@ -39,6 +40,7 @@ public class Monde {
 
    /**
     * Retourne le nom du monde.
+    * 
     * @return Nom du monde.
     */
    public String getNom() {
@@ -47,6 +49,7 @@ public class Monde {
 
    /**
     * Retourne l'entité du monde correspondant au nom passé en paramètre.
+    * 
     * @param nomEntite Nom de l'entité.
     * @return Entité correspondant au nom passé en paramètre.
     */
@@ -62,9 +65,22 @@ public class Monde {
 
    /**
     * Ajoute une entité au monde.
+    * 
     * @param entite Entité à ajouter.
     */
-   public void ajouter(Entite entite) {
+   public void ajouter(Entite entite)
+         throws NomDEntiteDejaUtiliseDansLeMondeException, EntiteDejaDansUnAutreMondeException {
+
+      if (entite.getMonde() != this) {
+         throw new EntiteDejaDansUnAutreMondeException(
+               String.format("L'entité %s est déjà dans un autre monde", entite.getNom()));
+      }
+
+      if (this.getEntite(entite.getNom()) != null) {
+         throw new NomDEntiteDejaUtiliseDansLeMondeException(
+               String.format("L'entité %s est déjà dans le monde", entite.getNom()));
+      }
+
       Entite[] entites = new Entite[this.entites.length + 1];
 
       for (int i = 0; i < this.entites.length; i++) {

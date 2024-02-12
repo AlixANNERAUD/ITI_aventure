@@ -1,7 +1,9 @@
 package fr.insarouen.iti.prog.itiaventure.elements.structure;
 
 import fr.insarouen.iti.prog.itiaventure.Monde;
+import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.ObjetNonDeplacableException;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
 /**
@@ -21,15 +23,17 @@ public class Piece extends ElementStructurel {
 
     /**
      * Constructeur Piece.
-     * @param nom Nom de la pièce.
+     * 
+     * @param nom   Nom de la pièce.
      * @param monde Monde dans lequel se trouve la pièce.
      */
-    public Piece(String nom, Monde monde) {
+    public Piece(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
         super(nom, monde);
     }
 
     /**
      * Cette méthode vérifie si la pièce contient un objet.
+     * 
      * @param objet Objet à vérifier.
      * @return true si la pièce contient l'objet, false sinon.
      */
@@ -39,6 +43,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode vérifie si la pièce contient un objet.
+     * 
      * @param nomObjet Nom de l'objet à vérifier.
      * @return true si la pièce contient l'objet, false sinon.
      */
@@ -54,6 +59,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode vérifie si la pièce contient un vivant.
+     * 
      * @param nomVivant Nom du vivant à vérifier.
      * @return true si la pièce contient le vivant, false sinon.
      */
@@ -69,6 +75,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode vérifie si la pièce contient un vivant.
+     * 
      * @param vivant Vivant à vérifier.
      * @return true si la pièce contient le vivant, false sinon.
      */
@@ -78,6 +85,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode dépose un objet dans la pièce.
+     * 
      * @param objet Objet à déposer.
      */
     public void deposer(Objet objet) {
@@ -94,6 +102,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode fait entrer un vivant dans la pièce.
+     * 
      * @param vivant Vivant à faire entrer.
      */
     public void entrer(Vivant vivant) {
@@ -110,19 +119,34 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode retire un objet de la pièce.
+     * 
      * @param objet Objet à retirer.
      * @return L'objet retiré, null si non trouvé.
      */
-    public Objet retirer(Objet objet) {
+    public Objet retirer(Objet objet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
         return this.retirer(objet.getNom());
     }
 
     /**
      * Cette méthode retire un objet de la pièce.
+     * 
      * @param nomObjet Nom de l'objet à retirer.
      * @return L'objet retiré, null si non trouvé.
      */
-    public Objet retirer(String nomObjet) {
+    public Objet retirer(String nomObjet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
+
+        if (!this.contientObjet(nomObjet)) {
+            throw new ObjetAbsentDeLaPieceException(
+                    String.format("L'objet %s n'est pas dans la piece", nomObjet));
+        }
+
+        if (((Objet) this.getMonde().getEntite(nomObjet)).estDeplacable()) { // Evite une allocation inutile qui
+                                                                             // pourrait être plus couteuse que la
+                                                                             // vérification
+            throw new ObjetNonDeplacableException(
+                    String.format("L'objet %s n'est pas déplaçable", nomObjet));
+        }
+
         Objet[] objets = new Objet[this.objets.length - 1];
         Objet objet = null;
 
@@ -136,15 +160,14 @@ public class Piece extends ElementStructurel {
             }
         }
 
-        if (objet != null) {
-            this.objets = objets;
-        }
+        this.objets = objets;
         return objet;
 
     }
 
     /**
      * Cette fonction retourne le tableau contenant les objets de la pièce.
+     * 
      * @return
      */
     public Objet[] getObjets() {
@@ -153,6 +176,7 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette fonction retourne le tableau contenant les vivants de la pièce.
+     * 
      * @return
      */
     public Vivant[] getVivants() {
@@ -175,16 +199,27 @@ public class Piece extends ElementStructurel {
 
     /**
      * Cette méthode sort un vivant de la pièce.
+     * 
      * @param vivant Vivant à sortir
      * @return Le vivant qui à été sorti, null si non trouvé.
      */
-    public Vivant sortir(Vivant vivant) {
+    public Vivant sortir(Vivant vivant) throws VivantAbsentDeLaPieceException {
+        return this.sortir(vivant.getNom());
+    }
+
+    public Vivant sortir(String nomVivant) throws VivantAbsentDeLaPieceException {
+
+        if (!this.contientVivant(nomVivant)) {
+            throw new VivantAbsentDeLaPieceException(
+                    String.format("Le vivant %s n'est pas dans la piece %s", nomVivant, this.getNom()));
+        }
+
         Vivant[] vivants = new Vivant[this.vivants.length - 1];
         Vivant vivantSorti = null;
 
         int j = 0;
         for (int i = 0; i < this.vivants.length; i++) {
-            if (this.vivants[i].getNom().equals(vivant.getNom()) && vivantSorti == null) {
+            if (this.vivants[i].getNom().equals(nomVivant) && vivantSorti == null) {
                 vivantSorti = this.vivants[i];
             } else {
                 vivants[j] = this.vivants[i];
@@ -192,9 +227,7 @@ public class Piece extends ElementStructurel {
             }
         }
 
-        if (vivantSorti != null) {
-            this.vivants = vivants;
-        }
+        this.vivants = vivants;
         return vivantSorti;
     }
 }

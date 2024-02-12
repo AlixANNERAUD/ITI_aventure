@@ -9,19 +9,19 @@ import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 public class Main {
 
     public static class EntiteTest extends Entite {
-        public EntiteTest(String nom, Monde monde) {
+        public EntiteTest(String nom, Monde monde) throws ITIAventureException {
             super(nom, monde);
         }
     }
 
     public static class ElementStructurelTest extends ElementStructurel {
-        public ElementStructurelTest(String nom, Monde monde) {
+        public ElementStructurelTest(String nom, Monde monde) throws ITIAventureException {
             super(nom, monde);
         }
     }
 
     private static class ObjetTest extends Objet {
-        public ObjetTest(String nom, Monde monde) {
+        public ObjetTest(String nom, Monde monde) throws ITIAventureException {
             super(nom, monde);
         }
 
@@ -31,11 +31,15 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ITIAventureException {
         Monde monde = new Monde("my little pony");
         System.out.println(monde.toString());
 
         Entite entite = new EntiteTest("e1", monde);
+        Entite entite2 = new EntiteTest("e1", monde);
+
+        monde.ajouter(entite);
+        monde.ajouter(entite2);
 
         System.out.println(entite.toString());
 
@@ -47,17 +51,13 @@ public class Main {
 
         System.out.println(elementStructurel.toString());
         Piece piece = new Piece("p4", monde);
-        Vivant vivant = new Vivant("Jean-Jacques", monde, 2,3, piece, objet);
+        Vivant vivant = new Vivant("Jean-Jacques", monde, 2, 3, piece, objet);
 
-        System.out.println(vivant.toString()); 
+        System.out.println(vivant.toString());
 
-        
         piece.deposer(objet);
         piece.entrer(vivant);
         System.out.println(piece.toString());
 
-        
-        
-        
     }
 }
