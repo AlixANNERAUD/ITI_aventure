@@ -1,1 +1,2 @@
-java -classpath build fr.insarouen.iti.prog.itiaventure.Main
+#!/bin/bash
+java -classpath classes fr.insarouen.iti.prog.itiaventure.Main

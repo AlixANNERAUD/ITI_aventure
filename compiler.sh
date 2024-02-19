@@ -1,1 +1,2 @@
-javac -classpath ./build -sourcepath ./src -d ./build ./src/fr/insarouen/iti/prog/itiaventure/Main.java
+#!/bin/bash
+javac -classpath ./classes -sourcepath ./src -d ./classes ./src/fr/insarouen/iti/prog/itiaventure/Main.java
