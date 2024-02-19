@@ -140,7 +140,7 @@ public class Piece extends ElementStructurel {
                     String.format("L'objet %s n'est pas dans la piece", nomObjet));
         }
 
-        if (((Objet) this.getMonde().getEntite(nomObjet)).estDeplacable()) { // Evite une allocation inutile qui
+        if (!((Objet) this.getMonde().getEntite(nomObjet)).estDeplacable()) { // Evite une allocation inutile qui
                                                                              // pourrait être plus couteuse que la
                                                                              // vérification
             throw new ObjetNonDeplacableException(

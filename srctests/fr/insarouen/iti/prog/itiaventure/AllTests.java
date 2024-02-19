@@ -1,14 +1,14 @@
 package fr.insarouen.iti.prog.itiaventure;
 
-import fr.insarouen.iti.prog.itiaventure.elements.TestEntite;
+import fr.insarouen.iti.prog.itiaventure.elements.AllTestElements;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({TestEntite.class})
+@SuiteClasses({ AllTestElements.class, TestMonde.class })
 
 public class AllTests {
-        
+
 }
