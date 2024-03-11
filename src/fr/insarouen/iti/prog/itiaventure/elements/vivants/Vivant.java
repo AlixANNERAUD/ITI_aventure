@@ -6,10 +6,17 @@ import java.util.Map;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
+import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.ObjetNonDeplacableException;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.ObjetAbsentDeLaPieceException;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.PorteFermeException;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.PorteInexistanteDansLaPieceException;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.VivantAbsentDeLaPieceException;
+import fr.insarouen.iti.prog.itiaventure.elements.Activable;
+import fr.insarouen.iti.prog.itiaventure.elements.ActivationException;
 
 public class Vivant extends Entite {
 
@@ -49,9 +56,17 @@ public class Vivant extends Entite {
         this.pointVie = pointVie;
         this.pointForce = pointForce;
         this.piece = piece;
-        for (int i = 0; i < objets.length; i++) {
-            this.objets.put(objets[i].getNom(), objets[i]);
+        for (Objet objet : objets) {
+            this.objets.put(objet.getNom(), objet);
         }
+    }
+
+    public void activerActivable(Activable activable) throws ActivationException {
+        activable.activer();
+    }
+
+    public void activerActivableAvecObjet(Activable activable, Objet objet) throws ActivationException {
+        activable.activerAvec(objet);
     }
 
     /**
@@ -76,9 +91,7 @@ public class Vivant extends Entite {
                             this.getNom(), nomObjet));
         }
 
-        Objet o = this.objets.get(nomObjet);
-        this.piece.deposer(o);
-        this.objets.remove(nomObjet);
+        this.piece.deposer(this.objets.remove(nomObjet));
     }
 
     /**
@@ -124,6 +137,14 @@ public class Vivant extends Entite {
     }
 
     /**
+     * Indique si le vivant est mort.
+     * @return Boolean
+     */
+    public boolean estMort() {
+        return this.pointVie <= 0;
+    }
+
+    /**
      * Indique si l'objet est contenu dans le vivant à partir de l'objet.
      * 
      * @param objet
@@ -140,7 +161,7 @@ public class Vivant extends Entite {
      * @return Boolean
      */
     public Boolean possede(String nomObjet) {
-        return this.objets.get(nomObjet) != null;
+        return this.objets.containsKey(nomObjet);
     }
 
     /**
@@ -167,6 +188,55 @@ public class Vivant extends Entite {
      */
     public void prendre(Objet objet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
         this.prendre(objet.getNom());
+    }
+
+    /**
+     * Cette méthode permet à un vivant de franchir une porte (passer d'une pièce à
+     * une autre)
+     * 
+     * @param nomPorte Nom de la porte à franchir
+     * @throws PorteFermeException
+     * @throws PorteInexistanteDansLaPieceException
+     */
+    public void franchir(String nomPorte) throws PorteFermeException, PorteInexistanteDansLaPieceException {
+        Porte porte = this.piece.getPorte(nomPorte);
+        if (porte == null) {
+            throw new PorteInexistanteDansLaPieceException(
+                    String.format("La porte %s n'existe pas dans la pièce %s", nomPorte, this.piece.getNom()));
+        }
+        Etat etat = porte.getEtat();
+
+        switch (etat) {
+            case Etat.VERROUILLE:
+                throw new PorteFermeException("La porte est verrouillée");
+            case Etat.FERME:
+                throw new PorteFermeException("La porte est fermée");
+            case Etat.OUVERT:
+                try {
+                    this.piece.sortir(this);
+                } catch (VivantAbsentDeLaPieceException e) {
+                    // Exception qui ne devrait jamais arriver
+                    e.printStackTrace();
+                }
+
+                this.piece = porte.getPieceAutreCote(this.piece);
+
+                this.piece.entrer(this);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * Cette méthode permet à un vivant de franchir une porte (passer d'une pièce à une autre)
+     * @param porte Nom de la porte à franchir.
+     * @throws PorteFermeException Porte fermée.
+     * @throws PorteInexistanteDansLaPieceException Porte inexistante dans la pièce.
+     */
+    public void franchir(Porte porte) throws PorteFermeException, PorteInexistanteDansLaPieceException {
+        this.franchir(porte.getNom());
     }
 
     public String toString() {

@@ -25,6 +25,11 @@ public class Piece extends ElementStructurel {
     private Map<String, Vivant> vivants = new HashMap<String, Vivant>();
 
     /**
+     * Tableau contenant les portes de la pièce.
+     */
+    private Map<String, Porte> portes = new HashMap<String, Porte>();
+
+    /**
      * Constructeur Piece.
      * 
      * @param nom   Nom de la pièce.
@@ -52,7 +57,7 @@ public class Piece extends ElementStructurel {
      * @return true si la pièce contient l'objet, false sinon.
      */
     public boolean contientObjet(String nomObjet) {
-        return this.objets.get(nomObjet) != null;
+        return this.objets.containsKey(nomObjet);
     }
 
     /**
@@ -62,7 +67,7 @@ public class Piece extends ElementStructurel {
      * @return true si la pièce contient le vivant, false sinon.
      */
     public boolean contientVivant(String nomVivant) {
-        return this.vivants.get(nomVivant) != null;
+        return this.vivants.containsKey(nomVivant);
     }
 
     /**
@@ -123,9 +128,7 @@ public class Piece extends ElementStructurel {
                     String.format("L'objet %s n'est pas déplaçable", nomObjet));
         }
 
-        Objet o = this.objets.get(nomObjet);
-        this.objets.remove(nomObjet);
-        return o;
+        return this.objets.remove(nomObjet);
     }
 
     /**
@@ -171,6 +174,11 @@ public class Piece extends ElementStructurel {
             stringBuilder.append(vivant.toString());
         }
 
+        for (Porte porte : this.portes.values()) {
+            stringBuilder.append("\n\t-> ");
+            stringBuilder.append(porte.toString());
+        }
+
         return stringBuilder.toString();
     }
 
@@ -191,8 +199,45 @@ public class Piece extends ElementStructurel {
                     String.format("Le vivant %s n'est pas dans la piece %s", nomVivant, this.getNom()));
         }
 
-        Vivant v = this.vivants.get(nomVivant);
-        this.vivants.remove(nomVivant);
-        return v;
+        return this.vivants.remove(nomVivant);
+    }
+
+    /**
+     * Cette méthode ajoute une porte à la pièce.
+     * 
+     * @param porte Porte à ajouter.
+     */
+    protected void addPorte(Porte porte) {
+        this.portes.put(porte.getNom(), porte);
+    }
+
+    /**
+     * Cette méthode vérifie si la pièce contient une porte.
+     * 
+     * @param porte Porte à vérifier.
+     * @return true si la pièce contient la porte, false sinon.
+     */
+    public boolean aLaPorte(Porte porte) {
+        return this.aLaPorte(porte.getNom());
+    }
+
+    /**
+     * Cette méthode vérifie si la pièce contient une porte.
+     * 
+     * @param nomPorte Nom de la porte à vérifier.
+     * @return true si la pièce contient la porte, false sinon.
+     */
+    public boolean aLaPorte(String nomPorte) {
+        return this.portes.containsKey(nomPorte);
+    }
+
+    /**
+     * Cette méthode retourne une porte de la pièce.
+     * 
+     * @param nomPorte Nom de la porte à retourner.
+     * @return La porte correspondante, null si non trouvée.
+     */
+    public Porte getPorte(String nomPorte) {
+        return this.portes.get(nomPorte);
     }
 }
