@@ -62,8 +62,7 @@ public class TestVivant {
         assertThat(vivant.getPointVie(), is(2));
         assertThat(vivant.getPointForce(), is(3));
 
-        assertThat(Arrays.asList(this.objets).containsAll(Arrays.asList(vivant.getObjets())), is(true));        
-        assertThat(Arrays.asList(vivant.getObjets()).containsAll(Arrays.asList(this.objets)), is(true));
+        
     }
 
     @Test

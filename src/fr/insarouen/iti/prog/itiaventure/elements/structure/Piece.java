@@ -1,5 +1,6 @@
 package fr.insarouen.iti.prog.itiaventure.elements.structure;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,17 +18,17 @@ public class Piece extends ElementStructurel {
     /**
      * Tableau contenant les objets de la pièce.
      */
-    private Map<String, Objet> objets = new HashMap<String, Objet>();
+    final private Map<String, Objet> objets = new HashMap<String, Objet>();
 
     /**
      * Tableau contenant les vivants de la pièce.
      */
-    private Map<String, Vivant> vivants = new HashMap<String, Vivant>();
+    final private Map<String, Vivant> vivants = new HashMap<String, Vivant>();
 
     /**
      * Tableau contenant les portes de la pièce.
      */
-    private Map<String, Porte> portes = new HashMap<String, Porte>();
+    final private Map<String, Porte> portes = new HashMap<String, Porte>();
 
     /**
      * Constructeur Piece.
@@ -115,15 +116,16 @@ public class Piece extends ElementStructurel {
      * @return L'objet retiré, null si non trouvé.
      */
     public Objet retirer(String nomObjet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
+        Objet objet = this.objets.get(nomObjet);
 
-        if (!this.contientObjet(nomObjet)) {
+        if (objet == null) {
             throw new ObjetAbsentDeLaPieceException(
                     String.format("L'objet %s n'est pas dans la piece", nomObjet));
         }
 
-        if (!((Objet) this.getMonde().getEntite(nomObjet)).estDeplacable()) { // Evite une allocation inutile qui
-                                                                              // pourrait être plus couteuse que la
-                                                                              // vérification
+        if (!objet.estDeplacable()) { // Evite une allocation inutile qui
+                                      // pourrait être plus couteuse que la
+                                      // vérification
             throw new ObjetNonDeplacableException(
                     String.format("L'objet %s n'est pas déplaçable", nomObjet));
         }
@@ -136,14 +138,8 @@ public class Piece extends ElementStructurel {
      * 
      * @return
      */
-    public Objet[] getObjets() {
-        Objet[] objets = new Objet[this.objets.size()];
-        int i = 0;
-        for (Objet objet : this.objets.values()) {
-            objets[i] = objet;
-            i++;
-        }
-        return objets;
+    public Collection<Objet> getObjets() {
+        return this.objets.values();
     }
 
     /**
@@ -151,34 +147,13 @@ public class Piece extends ElementStructurel {
      * 
      * @return
      */
-    public Vivant[] getVivants() {
-        Vivant[] vivants = new Vivant[this.vivants.size()];
-        int i = 0;
-        for (Vivant vivant : this.vivants.values()) {
-            vivants[i] = vivant;
-            i++;
-        }
-        return vivants;
+    public Collection<Vivant> getVivants() {
+        return this.vivants.values();
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("Piece: %s", this.getNom()));
-        for (Objet objet : this.objets.values()) {
-            stringBuilder.append("\n\t-> ");
-            stringBuilder.append(objet.toString());
-        }
-
-        for (Vivant vivant : this.vivants.values()) {
-            stringBuilder.append("\n\t-> ");
-            stringBuilder.append(vivant.toString());
-        }
-
-        for (Porte porte : this.portes.values()) {
-            stringBuilder.append("\n\t-> ");
-            stringBuilder.append(porte.toString());
-        }
-
+        stringBuilder.append(String.format("Piece: %s\n%s\n%s\n%s", this.getNom(), this.objets.toString(), this.vivants.toString(), this.portes.toString()));
         return stringBuilder.toString();
     }
 
@@ -193,13 +168,14 @@ public class Piece extends ElementStructurel {
     }
 
     public Vivant sortir(String nomVivant) throws VivantAbsentDeLaPieceException {
+        Vivant vivant = this.vivants.remove(nomVivant);
 
-        if (!this.contientVivant(nomVivant)) {
+        if (vivant == null) {
             throw new VivantAbsentDeLaPieceException(
                     String.format("Le vivant %s n'est pas dans la piece %s", nomVivant, this.getNom()));
         }
 
-        return this.vivants.remove(nomVivant);
+        return vivant;
     }
 
     /**

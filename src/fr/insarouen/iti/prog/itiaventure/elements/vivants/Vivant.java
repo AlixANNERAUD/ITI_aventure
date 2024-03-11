@@ -1,5 +1,6 @@
 package fr.insarouen.iti.prog.itiaventure.elements.vivants;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,14 +101,8 @@ public class Vivant extends Entite {
      * 
      * @return Objet[], un tableau contenant les objets du vivants
      */
-    public Objet[] getObjets() {
-        Objet[] objets = new Objet[this.objets.size()];
-        int i = 0;
-        for (Objet objet : this.objets.values()) {
-            objets[i] = objet;
-            i++;
-        }
-        return objets;
+    public Collection<Objet> getObjets() {
+        return this.objets.values();
     }
 
     /**
@@ -139,6 +134,7 @@ public class Vivant extends Entite {
 
     /**
      * Indique si le vivant est mort.
+     * 
      * @return Boolean
      */
     public boolean estMort() {
@@ -226,9 +222,11 @@ public class Vivant extends Entite {
     }
 
     /**
-     * Cette méthode permet à un vivant de franchir une porte (passer d'une pièce à une autre)
+     * Cette méthode permet à un vivant de franchir une porte (passer d'une pièce à
+     * une autre)
+     * 
      * @param porte Nom de la porte à franchir.
-     * @throws PorteFermeException Porte fermée.
+     * @throws PorteFermeException                  Porte fermée.
      * @throws PorteInexistanteDansLaPieceException Porte inexistante dans la pièce.
      */
     public void franchir(Porte porte) throws PorteFermeException, PorteInexistanteDansLaPieceException {
