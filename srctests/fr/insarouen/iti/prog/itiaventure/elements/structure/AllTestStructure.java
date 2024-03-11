@@ -5,8 +5,10 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TestPiece.class })
+@SuiteClasses({ TestPiece.class,
+        TestPorte.class,
+})
 
 public class AllTestStructure {
-    
+
 }

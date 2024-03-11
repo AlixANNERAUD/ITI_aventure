@@ -59,6 +59,7 @@ public class Vivant extends Entite {
         for (Objet objet : objets) {
             this.objets.put(objet.getNom(), objet);
         }
+        this.piece.entrer(this);
     }
 
     public void activerActivable(Activable activable) throws ActivationException {
@@ -171,12 +172,7 @@ public class Vivant extends Entite {
      * @param nomObjet
      */
     public void prendre(String nomObjet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
-        if (this.piece.contientObjet(nomObjet)) {
-            return;
-        }
-
         Objet objet = this.piece.retirer(nomObjet);
-
         this.objets.put(nomObjet, objet);
     }
 

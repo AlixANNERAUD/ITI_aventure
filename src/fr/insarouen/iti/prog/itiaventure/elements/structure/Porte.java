@@ -17,8 +17,9 @@ public class Porte extends ElementStructurel implements Activable {
 
     /**
      * Constructeur de Porte
-     * @param nom Nom de la porte
-     * @param monde Monde dans lequel se trouve la porte
+     * 
+     * @param nom    Nom de la porte
+     * @param monde  Monde dans lequel se trouve la porte
      * @param pieceA Piece A
      * @param pieceB Piece B
      * @throws NomDEntiteDejaUtiliseDansLeMondeException
@@ -35,11 +36,12 @@ public class Porte extends ElementStructurel implements Activable {
 
     /**
      * Constructeur de Porte
-     * @param nom Nom de la porte
-     * @param monde Monde dans lequel se trouve la porte
+     * 
+     * @param nom     Nom de la porte
+     * @param monde   Monde dans lequel se trouve la porte
      * @param serrure Serrure de la porte
-     * @param pieceA Piece A
-     * @param pieceB Piece B
+     * @param pieceA  Piece A
+     * @param pieceB  Piece B
      * @throws NomDEntiteDejaUtiliseDansLeMondeException
      */
     public Porte(String nom, Monde monde, Serrure serrure, Piece pieceA, Piece pieceB)
@@ -57,12 +59,15 @@ public class Porte extends ElementStructurel implements Activable {
      * Activer la porte
      */
     public void activer() throws ActivationImpossibleException {
-        if (this.etat == Etat.FERME) {
-            this.etat = Etat.OUVERT;
-        } else if (this.etat == Etat.OUVERT) {
-            this.etat = Etat.FERME;
-        } else if (this.etat == Etat.VERROUILLE) {
-            throw new ActivationImpossibleException("La porte est verrouillée");
+        switch (this.etat) {
+            case Etat.FERME:
+                this.etat = Etat.OUVERT;
+                break;
+            case Etat.OUVERT:
+                this.etat = Etat.FERME;
+                break;
+            default:
+                throw new ActivationImpossibleException("La porte est verrouillée");
         }
     }
 
@@ -97,6 +102,7 @@ public class Porte extends ElementStructurel implements Activable {
 
     /**
      * Récupère la serrure de la porte
+     * 
      * @return Serrure
      */
     public Serrure getSerrure() {
@@ -105,13 +111,14 @@ public class Porte extends ElementStructurel implements Activable {
 
     /**
      * Récupère la porte de l'autre côté
+     * 
      * @param piece
      * @return La porte de l'autre côté
      */
     public Piece getPieceAutreCote(Piece piece) {
-        if (piece == this.pieceA) {
+        if (piece.equals(this.pieceA)) {
             return this.pieceB;
-        } else if (piece == this.pieceB) {
+        } else if (piece.equals(this.pieceB)) {
             return this.pieceA;
         } else {
             return null;

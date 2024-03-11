@@ -2,8 +2,6 @@ package fr.insarouen.iti.prog.itiaventure.elements.vivants;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
@@ -15,8 +13,10 @@ import org.junit.Test;
 import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
+import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
+import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
 
 public class TestVivant {
 
@@ -32,17 +32,20 @@ public class TestVivant {
     }
 
     private Monde monde;
-    private Piece piece;
+    private Piece piece, pieceB;
     private ObjetTest[] objets;
+    private Porte porte;
 
     @Before
     public void avantTest() throws Exception {
         this.monde = new Monde("monde");
         this.piece = new Piece("piece", this.monde);
+        this.pieceB = new Piece("pieceB", this.monde);
         this.objets = new ObjetTest[10];
         for (int i = 0; i < 10; i++) {
             this.objets[i] = new ObjetTest("objet" + i, this.monde);
         }
+        this.porte = new Porte("porte", this.monde, this.piece, this.pieceB);
     }
 
     @Test
@@ -85,11 +88,35 @@ public class TestVivant {
         }
     }
 
+    @Test 
+    public void testFranchir() throws ITIAventureException {
+        Vivant vivant = new Vivant("vivant", this.monde, 2, 3, this.piece, this.objets);
+        assertThat(vivant.getPiece(), is(piece));
+        assertThat(this.piece.contientVivant(vivant), is(true));
+
+        vivant.activerActivable(this.porte);
+        assertThat(this.porte.getEtat(), is(Etat.OUVERT));
+
+        vivant.franchir(porte);
+        assertThat(vivant.getPiece().equals(this.pieceB), is(true));
+        assertThat(this.piece.contientVivant(vivant), is(false));
+    }    
+
+    @Test
+    public void testEstMort() throws ITIAventureException {
+        Vivant vivantA = new Vivant("vivantA", this.monde, 2, 3, this.piece, this.objets);
+        assertThat(vivantA.estMort(), is(false));
+        Vivant vivantB = new Vivant("vivantB", this.monde, 0, 3, this.piece, this.objets);
+        assertThat(vivantB.estMort(), is(true));
+    }
+
     @After
     public void apresTest() {
         this.monde = null;
         this.piece = null;
         this.objets = null;
+        this.porte = null;
+        this.pieceB = null;
     }
 
 }

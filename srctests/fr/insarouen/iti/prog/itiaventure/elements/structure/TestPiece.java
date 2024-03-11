@@ -8,11 +8,8 @@ import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
-import fr.insarouen.iti.prog.itiaventure.elements.objets.ObjetNonDeplacableException;
-import fr.insarouen.iti.prog.itiaventure.elements.objets.TestObjet;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
-import org.hamcrest.core.IsEqual;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -69,10 +66,20 @@ public class TestPiece {
       assertThat(this.piece.contientVivant(vivant), is(false));
    }
 
+   @Test
+   public void testAjouterPorte() throws ITIAventureException {
+      Piece pieceB = new Piece("pieceB", this.monde);
+      Porte porte = new Porte("porte", this.monde, this.piece, pieceB);
+      this.piece.addPorte(porte);
+      assertThat(this.piece.aLaPorte(porte), is(true));
+      assertThat(pieceB.aLaPorte(porte.getNom()), is(true));
+      assertThat(this.piece.getPorte(porte.getNom()), is(porte));
+   }
+
    @After
-    public void apresTest() {
-        this.monde = null;
-        this.piece = null;
-    }
+   public void apresTest() {
+      this.monde = null;
+      this.piece = null;
+   }
 
 }
