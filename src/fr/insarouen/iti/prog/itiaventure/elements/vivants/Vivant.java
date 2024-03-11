@@ -1,5 +1,8 @@
 package fr.insarouen.iti.prog.itiaventure.elements.vivants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
@@ -28,7 +31,7 @@ public class Vivant extends Entite {
     /**
      * Tableau contenant les objets du vivant.
      */
-    private Objet[] objets;
+    private Map<String, Objet> objets = new HashMap<String, Objet>();
 
     /**
      * Constructeur Vivant.
@@ -46,11 +49,13 @@ public class Vivant extends Entite {
         this.pointVie = pointVie;
         this.pointForce = pointForce;
         this.piece = piece;
-        this.objets = objets;
+        for (int i = 0; i < objets.length; i++) {
+            this.objets.put(objets[i].getNom(), objets[i]);
+        }
     }
 
     /**
-     * Depose un objet dans le vivant à partir d'un objet
+     * Depose un objet du vivant dans la piece à partir de l'objet
      * 
      * @param objet
      */
@@ -59,7 +64,7 @@ public class Vivant extends Entite {
     }
 
     /**
-     * Depose un objet dans le vivant à partir du nom de l'objet
+     * Depose un objet du vivant dans la piece à partir du nom de l'objet
      * 
      * @param nomObjet
      */
@@ -70,22 +75,10 @@ public class Vivant extends Entite {
                     String.format("Le vivant %s ne possède pas l'objet %s pour le déposer dans la pièce.",
                             this.getNom(), nomObjet));
         }
-        Objet[] objets = new Objet[this.objets.length - 1];
-        boolean trouve = false;
 
-        int j = 0;
-        for (int i = 0; i < this.objets.length; i++) {
-            if (this.objets[i].getNom().equals(nomObjet) && !trouve) {
-                this.piece.deposer(objets[i]);
-            } else {
-                objets[j] = this.objets[i];
-                j++;
-            }
-        }
-
-        if (trouve) {
-            this.objets = objets;
-        }
+        Objet o = this.objets.get(nomObjet);
+        this.piece.deposer(o);
+        this.objets.remove(nomObjet);
     }
 
     /**
@@ -94,7 +87,13 @@ public class Vivant extends Entite {
      * @return Objet[], un tableau contenant les objets du vivants
      */
     public Objet[] getObjets() {
-        return this.objets.clone();
+        Objet[] objets = new Objet[this.objets.size()];
+        int i = 0;
+        for (Objet objet : this.objets.values()) {
+            objets[i] = objet;
+            i++;
+        }
+        return objets;
     }
 
     /**
@@ -141,12 +140,7 @@ public class Vivant extends Entite {
      * @return Boolean
      */
     public Boolean possede(String nomObjet) {
-        for (int i = 0; i < this.objets.length; i++) {
-            if (this.objets[i].getNom().equals(nomObjet)) {
-                return true;
-            }
-        }
-        return false;
+        return this.objets.get(nomObjet) != null;
     }
 
     /**
@@ -162,15 +156,7 @@ public class Vivant extends Entite {
 
         Objet objet = this.piece.retirer(nomObjet);
 
-        Objet[] objets = new Objet[this.objets.length + 1];
-
-        for (int i = 0; i < this.objets.length; i++) {
-            objets[i] = this.objets[i];
-        }
-
-        objets[this.objets.length] = objet;
-
-        this.objets = objets;
+        this.objets.put(nomObjet, objet);
     }
 
     /**
@@ -188,9 +174,8 @@ public class Vivant extends Entite {
         stringBuilder.append(String.format("Vivant: %s\n", this.getNom()));
         stringBuilder.append(String.format("\t- Point de vie : %s\n", this.pointVie));
         stringBuilder.append(String.format("\t- Point de force : %s\n", this.pointForce));
-        for (int i = 0; i < this.objets.length; i++) {
-            stringBuilder.append("\n\t- ");
-            stringBuilder.append(this.objets[i].toString());
+        for (Objet objet : this.objets.values()) {
+            stringBuilder.append(String.format("\t- %s\n", objet.toString()));
         }
         return stringBuilder.toString();
     }

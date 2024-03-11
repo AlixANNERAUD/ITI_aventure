@@ -1,5 +1,8 @@
 package fr.insarouen.iti.prog.itiaventure.elements.structure;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
@@ -14,12 +17,12 @@ public class Piece extends ElementStructurel {
     /**
      * Tableau contenant les objets de la pièce.
      */
-    private Objet[] objets = new Objet[0];
+    private Map<String, Objet> objets = new HashMap<String, Objet>();
 
     /**
      * Tableau contenant les vivants de la pièce.
      */
-    private Vivant[] vivants = new Vivant[0];
+    private Map<String, Vivant> vivants = new HashMap<String, Vivant>();
 
     /**
      * Constructeur Piece.
@@ -27,7 +30,8 @@ public class Piece extends ElementStructurel {
      * @param nom   Nom de la pièce.
      * @param monde Monde dans lequel se trouve la pièce.
      */
-    public Piece(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
+    public Piece(
+            String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
         super(nom, monde);
     }
 
@@ -48,13 +52,7 @@ public class Piece extends ElementStructurel {
      * @return true si la pièce contient l'objet, false sinon.
      */
     public boolean contientObjet(String nomObjet) {
-        for (int i = 0; i < this.objets.length; i++) {
-            if (this.objets[i].getNom().equals(nomObjet)) {
-                return true;
-            }
-        }
-        return false;
-
+        return this.objets.get(nomObjet) != null;
     }
 
     /**
@@ -64,13 +62,7 @@ public class Piece extends ElementStructurel {
      * @return true si la pièce contient le vivant, false sinon.
      */
     public boolean contientVivant(String nomVivant) {
-        for (int i = 0; i < this.vivants.length; i++) {
-            if (this.vivants[i].getNom().equals(nomVivant)) {
-                return true;
-            }
-        }
-        return false;
-
+        return this.vivants.get(nomVivant) != null;
     }
 
     /**
@@ -89,15 +81,7 @@ public class Piece extends ElementStructurel {
      * @param objet Objet à déposer.
      */
     public void deposer(Objet objet) {
-        Objet[] objets = new Objet[this.objets.length + 1];
-
-        for (int i = 0; i < this.objets.length; i++) {
-            objets[i] = this.objets[i];
-        }
-
-        objets[this.objets.length] = objet;
-
-        this.objets = objets;
+        this.objets.put(objet.getNom(), objet);
     }
 
     /**
@@ -106,15 +90,7 @@ public class Piece extends ElementStructurel {
      * @param vivant Vivant à faire entrer.
      */
     public void entrer(Vivant vivant) {
-        Vivant[] vivants = new Vivant[this.vivants.length + 1];
-
-        for (int i = 0; i < this.vivants.length; i++) {
-            vivants[i] = this.vivants[i];
-        }
-
-        vivants[this.vivants.length] = vivant;
-
-        this.vivants = vivants;
+        this.vivants.put(vivant.getNom(), vivant);
     }
 
     /**
@@ -141,28 +117,15 @@ public class Piece extends ElementStructurel {
         }
 
         if (!((Objet) this.getMonde().getEntite(nomObjet)).estDeplacable()) { // Evite une allocation inutile qui
-                                                                             // pourrait être plus couteuse que la
-                                                                             // vérification
+                                                                              // pourrait être plus couteuse que la
+                                                                              // vérification
             throw new ObjetNonDeplacableException(
                     String.format("L'objet %s n'est pas déplaçable", nomObjet));
         }
 
-        Objet[] objets = new Objet[this.objets.length - 1];
-        Objet objet = null;
-
-        int j = 0;
-        for (int i = 0; i < this.objets.length; i++) {
-            if (this.objets[i].getNom().equals(nomObjet) && objet == null) {
-                objet = this.objets[i];
-            } else {
-                objets[j] = this.objets[i];
-                j++;
-            }
-        }
-
-        this.objets = objets;
-        return objet;
-
+        Objet o = this.objets.get(nomObjet);
+        this.objets.remove(nomObjet);
+        return o;
     }
 
     /**
@@ -171,7 +134,13 @@ public class Piece extends ElementStructurel {
      * @return
      */
     public Objet[] getObjets() {
-        return this.objets.clone();
+        Objet[] objets = new Objet[this.objets.size()];
+        int i = 0;
+        for (Objet objet : this.objets.values()) {
+            objets[i] = objet;
+            i++;
+        }
+        return objets;
     }
 
     /**
@@ -180,20 +149,28 @@ public class Piece extends ElementStructurel {
      * @return
      */
     public Vivant[] getVivants() {
-        return this.vivants.clone();
+        Vivant[] vivants = new Vivant[this.vivants.size()];
+        int i = 0;
+        for (Vivant vivant : this.vivants.values()) {
+            vivants[i] = vivant;
+            i++;
+        }
+        return vivants;
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Piece: %s", this.getNom()));
-        for (int i = 0; i < this.objets.length; i++) {
+        for (Objet objet : this.objets.values()) {
             stringBuilder.append("\n\t-> ");
-            stringBuilder.append(this.objets[i].toString());
+            stringBuilder.append(objet.toString());
         }
-        for (int i = 0; i < this.vivants.length; i++) {
+
+        for (Vivant vivant : this.vivants.values()) {
             stringBuilder.append("\n\t-> ");
-            stringBuilder.append(this.vivants[i].toString());
+            stringBuilder.append(vivant.toString());
         }
+
         return stringBuilder.toString();
     }
 
@@ -214,20 +191,8 @@ public class Piece extends ElementStructurel {
                     String.format("Le vivant %s n'est pas dans la piece %s", nomVivant, this.getNom()));
         }
 
-        Vivant[] vivants = new Vivant[this.vivants.length - 1];
-        Vivant vivantSorti = null;
-
-        int j = 0;
-        for (int i = 0; i < this.vivants.length; i++) {
-            if (this.vivants[i].getNom().equals(nomVivant) && vivantSorti == null) {
-                vivantSorti = this.vivants[i];
-            } else {
-                vivants[j] = this.vivants[i];
-                j++;
-            }
-        }
-
-        this.vivants = vivants;
-        return vivantSorti;
+        Vivant v = this.vivants.get(nomVivant);
+        this.vivants.remove(nomVivant);
+        return v;
     }
 }

@@ -1,5 +1,8 @@
 package fr.insarouen.iti.prog.itiaventure;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
 
 /**
@@ -10,7 +13,7 @@ public class Monde {
    /**
     * Tableau des entités du monde.
     */
-   private Entite[] entites = new Entite[0];
+   private Map<String, Entite> entites = new HashMap<String, Entite>();
 
    /**
     * Nom du monde.
@@ -31,8 +34,8 @@ public class Monde {
       stringBuilder.append("Monde : ");
       stringBuilder.append(this.nom);
       stringBuilder.append("\n");
-      for (int i = 0; i < this.entites.length; i++) {
-         stringBuilder.append(entites[i].toString());
+      for (Entite entite : this.entites.values()) {
+         stringBuilder.append(entite.toString());
          stringBuilder.append("\n");
       }
       return stringBuilder.toString();
@@ -54,13 +57,7 @@ public class Monde {
     * @return Entité correspondant au nom passé en paramètre.
     */
    public Entite getEntite(String nomEntite) {
-
-      for (int i = 0; i < this.entites.length; i++) {
-         if (this.entites[i].getNom().equals(nomEntite)) {
-            return this.entites[i];
-         }
-      }
-      return null;
+      return this.entites.get(nomEntite);
    }
 
    /**
@@ -81,15 +78,6 @@ public class Monde {
                String.format("L'entité %s est déjà dans le monde", entite.getNom()));
       }
 
-      Entite[] entites = new Entite[this.entites.length + 1];
-
-      for (int i = 0; i < this.entites.length; i++) {
-         entites[i] = this.entites[i];
-      }
-
-      entites[this.entites.length] = entite;
-
-      this.entites = entites;
-
+      this.entites.put(entite.getNom(), entite);
    }
 }
