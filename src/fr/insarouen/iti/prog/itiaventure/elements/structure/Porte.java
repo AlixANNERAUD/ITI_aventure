@@ -3,10 +3,12 @@ package fr.insarouen.iti.prog.itiaventure.elements.structure;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Activable;
+import fr.insarouen.iti.prog.itiaventure.elements.ActivationException;
 import fr.insarouen.iti.prog.itiaventure.elements.ActivationImpossibleAvecObjet;
 import fr.insarouen.iti.prog.itiaventure.elements.ActivationImpossibleException;
 import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.PiedDeBiche;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.serrurerie.Serrure;
 
 public class Porte extends ElementStructurel implements Activable {
@@ -58,8 +60,9 @@ public class Porte extends ElementStructurel implements Activable {
     /**
      * Activer la porte
      */
+    @Override
     public void activer() throws ActivationImpossibleException {
-        switch (this.etat) {
+        switch (this.getEtat()) {
             case Etat.FERME:
                 this.etat = Etat.OUVERT;
                 break;
@@ -67,30 +70,45 @@ public class Porte extends ElementStructurel implements Activable {
                 this.etat = Etat.FERME;
                 break;
             default:
-                throw new ActivationImpossibleException("La porte est verrouillée");
+                throw new ActivationImpossibleException("La porte ne peut pas être activée");
         }
     }
 
     /**
      * Activer la porte avec un objet
      */
-    public void activerAvec(Objet objet) throws ActivationImpossibleException, ActivationImpossibleAvecObjet {
-        if (this.etat != Etat.VERROUILLE) {
-            throw new ActivationImpossibleException("La porte n'est pas verrouillée");
-        }
+    @Override
+    public void activerAvec(Objet objet) throws ActivationException {
+        switch (this.getEtat()) {
+            case VERROUILLE:
+                if (objet.getClass() == PiedDeBiche.class) {
+                    this.etat = Etat.CASSE;
+                    break;
+                }
+                this.serrure.activerAvec(objet);
+                this.etat = Etat.OUVERT;
+                break;
+            case FERME:
+                if (objet.getClass() == PiedDeBiche.class) {
+                    this.etat = Etat.CASSE;
+                    break; // Si ça ne break pas ici ça continue sur le suivant
+                }
+            case OUVERT:
+                this.serrure.activerAvec(objet);
+                this.etat = Etat.VERROUILLE;
+                break;
+            default:
+                break;
 
-        if (!this.activableAvec(objet)) {
-            throw new ActivationImpossibleAvecObjet("La porte ne peut pas être activée avec cet objet");
         }
-
-        this.etat = Etat.OUVERT;
     }
 
     /**
      * Vérifie si la porte est activable avec un objet
      */
+    @Override
     public boolean activableAvec(Objet objet) {
-        return true; // TODO
+        return (objet.getClass() == PiedDeBiche.class) || (this.serrure.activableAvec(objet));
     }
 
     /**

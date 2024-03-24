@@ -63,6 +63,10 @@ public class Vivant extends Entite {
         this.piece.entrer(this);
     }
 
+    public void setPointVie(int pointVie) {
+        this.pointVie = pointVie;
+    }
+
     public void activerActivable(Activable activable) throws ActivationException {
         activable.activer();
     }
@@ -169,6 +173,10 @@ public class Vivant extends Entite {
      */
     public void prendre(String nomObjet) throws ObjetAbsentDeLaPieceException, ObjetNonDeplacableException {
         Objet objet = this.piece.retirer(nomObjet);
+        if (!objet.estDeplacable()) {
+            throw new ObjetNonDeplacableException(
+                    String.format("L'objet %s n'est pas déplaçable", objet.getNom()));
+        }
         this.objets.put(nomObjet, objet);
     }
 

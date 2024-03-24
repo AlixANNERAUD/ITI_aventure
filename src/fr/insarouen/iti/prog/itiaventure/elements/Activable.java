@@ -18,9 +18,8 @@ public interface Activable {
     public boolean activableAvec(Objet objet);
 
     /**
-     * Méthode permettant d'activer l'élément avec un objet.
+     * Méthode permettant d'activer l'élément.
      * 
-     * @param obj Objet avec lequel activer l'élément.
      * @throws ActivationException
      */
     public void activer() throws ActivationException;

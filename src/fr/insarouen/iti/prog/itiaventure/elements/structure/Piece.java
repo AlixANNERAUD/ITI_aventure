@@ -216,4 +216,13 @@ public class Piece extends ElementStructurel {
     public Porte getPorte(String nomPorte) {
         return this.portes.get(nomPorte);
     }
+
+    /**
+     * Cette méthode retourne les portes de la pièce.
+     * 
+     * @return Les portes de la pièce.
+     */
+    public Collection<Porte> getPortes() {
+        return this.portes.values();
+    }
 }

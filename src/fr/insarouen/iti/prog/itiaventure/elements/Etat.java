@@ -13,15 +13,15 @@ public enum Etat{
      */
     DEVEROUILLE,
     /**
+     * La porte est verrouillée.
+     */
+    VERROUILLE,
+    /**
      * La porte est fermée.
      */
     FERME,
     /**
      * La porte est ouverte.
      */
-    OUVERT,
-    /**
-     * La porte est verrouillée.
-     */
-    VERROUILLE
+    OUVERT
 }
