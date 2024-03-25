@@ -1,12 +1,17 @@
 package fr.insarouen.iti.prog.itiaventure.elements.vivants;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
+import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.Executable;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
@@ -14,8 +19,6 @@ import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.PorteFermeException;
 
 public class Monstre extends Vivant implements Executable {
-
-    static final Random random = new Random();
 
     public Monstre(String nom, Monde monde, int pointVie, int pointForce, Piece piece, Objet... objets)
             throws NomDEntiteDejaUtiliseDansLeMondeException {
@@ -29,22 +32,26 @@ public class Monstre extends Vivant implements Executable {
         }
 
         // Choisir une porte aléatoirement
-        Collection<Porte> portes = this.getPiece().getPortes();
-        int nombre = random.nextInt(portes.size());
-        for (int i = 0; i < nombre; i++) {
-            portes.iterator().next();
+        List<Porte> portes = this.getPiece().getPortes().stream().filter(p -> {
+            return p.getEtat() == Etat.OUVERT; // On ne peut pas franchir une porte fermée
+        })
+                .collect(Collectors.toList());
+        if (portes.isEmpty()) {
+            return;
         }
-        Porte porte = portes.iterator().next();
+        Collections.shuffle(portes); // Mélanger les portes
+        Porte porte = portes.getFirst(); // Prendre la première porte
 
         this.franchir(porte);
         this.setPointVie(this.getPointVie() - 1);
 
         // Récupérer les objets déplacables de la pièce
-        Collection<Objet> objets_piece = this.getPiece().getObjets().stream().filter(Objet::estDeplacable)
+        List<Objet> objets_piece = this.getPiece().getObjets().stream().filter(Objet::estDeplacable)
                 .collect(Collectors.toList());
 
         // Deposer les objets de l'inventaire
-        for (Objet objet : this.getObjets()) {
+        ArrayList<Objet> objetsMonstre = new ArrayList<Objet>(this.getObjets());
+        for (Objet objet : objetsMonstre) {
             this.deposer(objet);
         }
 

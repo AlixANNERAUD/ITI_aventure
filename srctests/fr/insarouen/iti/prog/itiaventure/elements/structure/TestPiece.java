@@ -8,23 +8,13 @@ import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.TestObjet;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestPiece {
-
-   class ObjetTest extends Objet {
-      ObjetTest(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
-         super(nom, monde);
-      }
-
-      @Override
-      public boolean estDeplacable() {
-         return true;
-      }
-   }
 
    private Monde monde;
    private Piece piece;
@@ -37,7 +27,7 @@ public class TestPiece {
 
    @Test
    public void testDeposer() throws NomDEntiteDejaUtiliseDansLeMondeException {
-      Objet objet = new ObjetTest("objet", this.monde);
+      Objet objet = new TestObjet.ObjetTestDeplacable("objet", this.monde);
       this.piece.deposer(objet);
       assertThat(this.piece.contientObjet(objet), is(true));
 
@@ -52,7 +42,7 @@ public class TestPiece {
 
    @Test
    public void testRetirer() throws ITIAventureException {
-      Objet objet = new ObjetTest("objet", this.monde);
+      Objet objet = new TestObjet.ObjetTestDeplacable("objet", this.monde);
       this.piece.deposer(objet);
       this.piece.retirer(objet);
       assertThat(this.piece.contientObjet(objet), is(false));

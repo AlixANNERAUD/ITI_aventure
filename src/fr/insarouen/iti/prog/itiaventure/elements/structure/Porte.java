@@ -4,7 +4,6 @@ import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Activable;
 import fr.insarouen.iti.prog.itiaventure.elements.ActivationException;
-import fr.insarouen.iti.prog.itiaventure.elements.ActivationImpossibleAvecObjet;
 import fr.insarouen.iti.prog.itiaventure.elements.ActivationImpossibleException;
 import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
@@ -108,7 +107,9 @@ public class Porte extends ElementStructurel implements Activable {
      */
     @Override
     public boolean activableAvec(Objet objet) {
-        return (objet.getClass() == PiedDeBiche.class) || (this.serrure.activableAvec(objet));
+        return (objet.getClass() == PiedDeBiche.class)
+                || (this.getSerrure() != null && (this.serrure.activableAvec(objet)));
+
     }
 
     /**

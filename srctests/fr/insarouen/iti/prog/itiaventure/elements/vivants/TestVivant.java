@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThrows;
 
-import java.util.Arrays;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,25 +13,15 @@ import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.TestObjet;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
 
 public class TestVivant {
 
-    class ObjetTest extends Objet {
-        public ObjetTest(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
-            super(nom, monde);
-        }
-
-        @Override
-        public boolean estDeplacable() {
-            return true;
-        }
-    }
-
     private Monde monde;
     private Piece piece, pieceB;
-    private ObjetTest[] objets;
+    private Objet[] objets;
     private Porte porte;
 
     @Before
@@ -41,9 +29,9 @@ public class TestVivant {
         this.monde = new Monde("monde");
         this.piece = new Piece("piece", this.monde);
         this.pieceB = new Piece("pieceB", this.monde);
-        this.objets = new ObjetTest[10];
+        this.objets = new Objet[10];
         for (int i = 0; i < 10; i++) {
-            this.objets[i] = new ObjetTest("objet" + i, this.monde);
+            this.objets[i] = new TestObjet.ObjetTestDeplacable("objet" + i, this.monde);
         }
         this.porte = new Porte("porte", this.monde, this.piece, this.pieceB);
     }

@@ -24,7 +24,7 @@ public class TestCoffre {
     }
 
     @Test
-    void testActivable() throws ITIAventureException {
+    public void testActivable() throws ITIAventureException {
         assertThat(this.coffre.getEtat(), is(Etat.FERME));
         this.coffre.activer();
         assertThat(this.coffre.getEtat(), is(Etat.OUVERT));

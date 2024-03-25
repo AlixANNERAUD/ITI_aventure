@@ -7,25 +7,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 import fr.insarouen.iti.prog.itiaventure.elements.ActivationImpossibleException;
 import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.PiedDeBiche;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.TestObjet;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.serrurerie.Clef;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.serrurerie.Serrure;
 
 public class TestPorte {
-
-    class ObjetTest extends Objet {
-        public ObjetTest(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
-            super(nom, monde);
-        }
-
-        @Override
-        public boolean estDeplacable() {
-            return true;
-        }
-    }
 
     private Monde monde;
     private Piece pieceA;
@@ -58,19 +50,19 @@ public class TestPorte {
     }
 
     @Test
-    public void testActivableAvec() throws NomDEntiteDejaUtiliseDansLeMondeException {
+    public void testActivation() throws NomDEntiteDejaUtiliseDansLeMondeException {
         Porte porte = new Porte("porte", this.monde, this.pieceA, this.pieceB);
-        Objet objet = new ObjetTest("objet", this.monde);
-        assertThat(porte.activableAvec(objet), is(true));
-    }
+        Objet objet = new TestObjet.ObjetTestDeplacable("objet", this.monde);
+        assertThat(porte.activableAvec(objet), is(false));
+        PiedDeBiche piedDeBiche = new PiedDeBiche(this.monde);
+        assertThat(porte.activableAvec(piedDeBiche), is(true));
 
-    @Test
-    public void testActiverAvec() throws ITIAventureException {
-        // TODO
-        // Objet objet = new ObjetTest("objet", this.monde);
-        // this.porte.activerAvec(objet);
-        // assertThat(this.porte.getEtat(), is(Etat.OUVERT));
-
+        Serrure serrure = new Serrure("serrure", this.monde);
+        Clef clef = serrure.creerClef();
+        Porte porteAvecSerrure = new Porte("porteAvecSerrure", this.monde, serrure, this.pieceA, this.pieceB);
+        assertThat(porteAvecSerrure.activableAvec(objet), is(false));
+        assertThat(porteAvecSerrure.activableAvec(piedDeBiche), is(true));
+        assertThat(porteAvecSerrure.activableAvec(clef), is(true));
     }
 
     @After

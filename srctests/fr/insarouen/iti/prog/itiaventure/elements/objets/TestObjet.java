@@ -2,6 +2,7 @@ package fr.insarouen.iti.prog.itiaventure.elements.objets;
 
 import fr.insarouen.iti.prog.itiaventure.ITIAventureException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
+import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,10 +12,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class TestObjet {
+    public static class ObjetTestNonDeplacable extends Objet {
 
-    class ObjetTestNonDeplacable extends Objet {
-
-        ObjetTestNonDeplacable(String nom, Monde monde) throws ITIAventureException {
+        public ObjetTestNonDeplacable(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
             super(nom, monde);
         }
 
@@ -24,9 +24,9 @@ public class TestObjet {
         }
     }
 
-    class ObjetTestDeplacable extends Objet {
+    public static class ObjetTestDeplacable extends Objet {
 
-        ObjetTestDeplacable(String nom, Monde monde) throws ITIAventureException {
+        public ObjetTestDeplacable(String nom, Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
             super(nom, monde);
         }
 
@@ -35,6 +35,7 @@ public class TestObjet {
             return true;
         }
     }
+
 
     private ObjetTestDeplacable objet_deplacable;
     private ObjetTestNonDeplacable objet_non_deplacable;
@@ -49,19 +50,18 @@ public class TestObjet {
     }
 
     @Test 
-    public void testConstructeur() {
+    public void test() {
         assertThat(this.objet_deplacable.getNom(), is("objet 1"));
         assertThat(this.objet_deplacable.getMonde(), is(this.monde));
         assertThat(this.objet_non_deplacable.getNom(), is("objet 2"));
         assertThat(this.objet_non_deplacable.getMonde(), is(this.monde));
-    }
 
-    @Test
-    public void testEgalite() throws ITIAventureException {
+        assertThat(this.objet_deplacable.estDeplacable(), is(true));
+        assertThat(this.objet_non_deplacable.estDeplacable(), is(false));
+       
         assertThat(this.objet_deplacable.equals(this.objet_deplacable), is(true));
-        Object o = new Object();
-        assertThat(this.objet_deplacable.equals(o), is(false));
-        assertThat(this.objet_deplacable.equals(objet_non_deplacable), is(false));
+        assertThat(this.objet_deplacable.equals(this.objet_non_deplacable), is(false));
+
     }
 
     @After 

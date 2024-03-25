@@ -16,7 +16,7 @@ public class Serrure extends Objet implements Activable {
     private static int compteur = 0;
 
     public static String getIdentifiant() {
-        return String.format("%i", compteur++);
+        return String.format("%d", compteur++);
     }
 
     public Serrure(Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
@@ -44,7 +44,7 @@ public class Serrure extends Objet implements Activable {
     }
 
     public boolean activableAvec(Objet objet) {
-        return this.clef.equals(objet);
+        return this.clef != null && this.clef.equals(objet);
     }
 
     public void activer() throws ActivationException {

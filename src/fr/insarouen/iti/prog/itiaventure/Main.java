@@ -5,6 +5,10 @@ import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
 import fr.insarouen.iti.prog.itiaventure.elements.objets.PiedDeBiche;
+import fr.insarouen.iti.prog.itiaventure.elements.objets.Coffre;
+
+import fr.insarouen.iti.prog.itiaventure.elements.vivants.Monstre;
+
 public class Main {
 
     public static void main(String[] args) {
