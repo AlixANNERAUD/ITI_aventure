@@ -1,10 +1,19 @@
 package fr.insarouen.iti.prog.itiaventure;
 
-
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
 import fr.insarouen.iti.prog.itiaventure.elements.objets.PiedDeBiche;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Scanner;
+
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Coffre;
 
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Monstre;
@@ -12,18 +21,63 @@ import fr.insarouen.iti.prog.itiaventure.elements.vivants.Monstre;
 public class Main {
 
     public static void main(String[] args) {
-        Monde monde = new Monde("Monde");
-        try {
-            Piece piece1 = new Piece("Piece 1", monde);
-            Piece piece2 = new Piece("Piece 2", monde);
-            Vivant vivant = new Vivant("Vivant", monde, 100, 100, piece1);
-            PiedDeBiche piedDeBiche = new PiedDeBiche(monde);
-            piece1.deposer(piedDeBiche);
-            System.out.println(monde);
-        } catch (NomDEntiteDejaUtiliseDansLeMondeException e) {
-            e.printStackTrace();
+        // On prend un scanner pour lire les entrées de l'utilisateur
+        Scanner scanner = new Scanner(System.in);
+
+        Simulateur simulateur = null;
+
+        // On itère jusqu'a ce que l'utilisateur entre 5
+        boolean continuer = true;
+        while (continuer) {
+
+            System.out.println("1/ Jouer");
+            System.out.println("2/ Charger un fichier de description");
+            System.out.println("3/ Sauver la partie actuelle");
+            System.out.println("4/ Charger une partie sauvegardée");
+            System.out.println("5/ Quitter");
+
+            switch (scanner.nextInt()) {
+                case 1:
+                    // TODO
+                    break;
+                case 2:
+                    try {
+                        FileReader file = new FileReader("./description.txt");
+                        simulateur = new Simulateur(file);
+                        file.close();
+                        System.out.println("Description chargée : %s" + simulateur.toString());
+                    } catch (Exception e) {
+                        System.out.println("Erreur lors de la lecture du fichier de description : " + e.getMessage());
+                    }
+                    break;
+                case 3:
+                    try {
+                        FileOutputStream file = new FileOutputStream("./sauvegarde.txt");
+                        simulateur.enregistrer(new ObjectOutputStream(file));
+                        file.close();
+                    } catch (Exception e) {
+                        System.out.println("Erreur lors de la sauvegarde de la partie : " + e.getMessage());
+                    }
+                    break;
+                case 4:
+                    try {
+                        FileInputStream file = new FileInputStream("./sauvegarde.txt");
+                        simulateur = new Simulateur(new ObjectInputStream(file));
+                        file.close();
+                    } catch (Exception e) {
+                        System.out.println("Erreur lors du chargement de la partie : " + e.getMessage());
+                    }
+                    System.out.println("Partie chargée : %s" + simulateur.toString());
+                    break;
+                case 5:
+                    continuer = false;
+                    break;
+                default:
+                    System.out.println("Veuillez entrer un nombre entre 1 et 5");
+                    break;
+            }
+
         }
     }
-
 
 }

@@ -15,12 +15,15 @@ public class Serrure extends Objet implements Activable {
     private Etat etat;
     private static int compteur = 0;
 
-    public static String getIdentifiant() {
-        return String.format("%d", compteur++);
+    public static String getIdentifiant(Monde monde) {
+        while (monde.getEntite(String.format("Clef %d", compteur)) != null) {
+            compteur++;
+        }
+        return String.format("Clef %d", compteur++);
     }
 
     public Serrure(Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
-        super("serrure " + getIdentifiant(), monde);
+        super("serrure " + getIdentifiant(monde), monde);
         this.clef = null;
         this.etat = Etat.VERROUILLE;
     }
@@ -34,10 +37,10 @@ public class Serrure extends Objet implements Activable {
     public final Clef creerClef() {
         if (this.clef == null) {
             try {
-                this.clef = new Clef(String.format("clef de ", getIdentifiant()) , this.getMonde());
+                this.clef = new Clef(String.format("clef de %s", getIdentifiant(this.getMonde())) , this.getMonde());
                 return this.clef;
             } catch (NomDEntiteDejaUtiliseDansLeMondeException e) {
-                throw new Error(e.toString()); // ne doit pas arriver
+                System.out.println("Erreur lors de la création de la clef");
             }
         }
         return null;
