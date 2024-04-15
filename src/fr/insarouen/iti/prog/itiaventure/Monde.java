@@ -1,9 +1,13 @@
 package fr.insarouen.iti.prog.itiaventure;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
+import fr.insarouen.iti.prog.itiaventure.elements.Executable;
+import fr.insarouen.iti.prog.itiaventure.elements.vivants.JoueurHumain;
 
 /**
  * Classe représentant un monde.
@@ -58,6 +62,26 @@ public class Monde {
     */
    public Entite getEntite(String nomEntite) {
       return this.entites.get(nomEntite);
+   }
+
+   /**
+    * Retourne les exécutables du monde.
+    *
+    * @return Exécutables du monde.
+    */
+   public Collection<Executable> getExecutables() {
+      return this.entites
+            // On récupère les valeurs de la map (les entités)
+            .values()
+            // On transforme les entités en stream (permet de les manipuler plus facilement)
+            .stream()
+            // On filtre les entités qui sont des exécutables (utilisation de fonction
+            // lambda)
+            .filter(entite -> entite instanceof Executable)
+            // On transtype les entités en exécutables
+            .map(entite -> (Executable) entite)
+            // On collecte les exécutables dans une liste
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
    }
 
    /**

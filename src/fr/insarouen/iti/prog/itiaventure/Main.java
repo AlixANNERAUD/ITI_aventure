@@ -6,6 +6,7 @@ import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.PiedDeBiche;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -45,10 +46,13 @@ public class Main {
                         FileReader file = new FileReader("./description.txt");
                         simulateur = new Simulateur(file);
                         file.close();
-                        System.out.println("Description chargée : %s" + simulateur.toString());
-                    } catch (Exception e) {
+                        simulateur.executerJusquaFin();
+                    } catch (FileNotFoundException e) {
                         System.out.println("Erreur lors de la lecture du fichier de description : " + e.getMessage());
+                    } catch (Throwable e) {
+                        System.out.println("Erreur lors de l'exécution de la partie : " + e.getMessage());
                     }
+
                     break;
                 case 3:
                     try {
@@ -64,10 +68,10 @@ public class Main {
                         FileInputStream file = new FileInputStream("./sauvegarde.txt");
                         simulateur = new Simulateur(new ObjectInputStream(file));
                         file.close();
-                    } catch (Exception e) {
+                        simulateur.executerJusquaFin();
+                    } catch (Throwable e) {
                         System.out.println("Erreur lors du chargement de la partie : " + e.getMessage());
                     }
-                    System.out.println("Partie chargée : %s" + simulateur.toString());
                     break;
                 case 5:
                     continuer = false;

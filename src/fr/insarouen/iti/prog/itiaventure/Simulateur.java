@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import fr.insarouen.iti.prog.itiaventure.elements.Entite;
+import fr.insarouen.iti.prog.itiaventure.elements.Executable;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.serrurerie.Clef;
 import fr.insarouen.iti.prog.itiaventure.elements.objets.serrurerie.Serrure;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
@@ -18,18 +19,42 @@ import fr.insarouen.iti.prog.itiaventure.elements.vivants.JoueurHumain;
 
 public class Simulateur {
 
+    /**
+     * Monde.
+     */
     private Monde monde;
-    private List<ConditionDeFin> conditionsDeFin = new ArrayList<ConditionDeFin>();
-    private boolean continuer;
 
+    /**
+     * Conditions de fin.
+     */
+    private List<ConditionDeFin> conditionsDeFin;
+
+    /**
+     * Etat du jeu.
+     */
+    private EtatDuJeu etat;
+
+    /**
+     * Constructeur Simulateur.
+     * 
+     * @param monde           Monde.
+     * @param conditionsDeFin Conditions de fin.
+     */
     public Simulateur(Monde monde, ConditionDeFin... conditionsDeFin) {
         this.monde = monde;
+        this.conditionsDeFin = new ArrayList<ConditionDeFin>();
         for (ConditionDeFin conditionDeFin : conditionsDeFin) {
             this.conditionsDeFin.add(conditionDeFin);
         }
     }
 
+    /**
+     * Constructeur Simulateur.
+     * 
+     * @param reader Reader.
+     */
     public Simulateur(Reader reader) {
+        this.conditionsDeFin = new ArrayList<ConditionDeFin>();
 
         Scanner scanner = new Scanner(reader);
 
@@ -56,11 +81,11 @@ public class Simulateur {
                     case "JoueurHumain":
                         this.creerJoueurHumain(scanner);
                         break;
-                    case "ConditionDeFin":
-                        // TODO
+                    case "ConditionDeFinVivantDansPiece":
+                        this.creerConditionDeFinVivantDansPiece(scanner);
                         break;
                     default:
-                        System.out.println("Classe non reconnue");
+                        System.out.println("Classe non reconnue : " + classe);
                         break;
                 }
             } catch (NomDEntiteDejaUtiliseDansLeMondeException e) {
@@ -70,16 +95,51 @@ public class Simulateur {
         }
     }
 
+    /**
+     * Crée une condition de fin pour un vivant dans une pièce.
+     * 
+     * @param scanner Scanner.
+     */
+    private void creerConditionDeFinVivantDansPiece(Scanner scanner) {
+        EtatDuJeu etat = EtatDuJeu.valueOf(scanner.next());
+        JoueurHumain joueur = (JoueurHumain) this.monde.getEntite(scanner.next());
+        Piece piece = (Piece) this.monde.getEntite(scanner.next());
+        ConditionDeFinVivantDansPiece condition = new ConditionDeFinVivantDansPiece(etat, joueur, piece);
+        this.ajouterConditionDeFin(condition);
+    }
+
+    /**
+     * Crée un monde.
+     * 
+     * @param scanner Scanner.
+     * @throws NomDEntiteDejaUtiliseDansLeMondeException Erreur lors de la création
+     *                                                   du monde.
+     */
     private void creerMonde(Scanner scanner) throws NomDEntiteDejaUtiliseDansLeMondeException {
         String nom = scanner.next();
         this.monde = new Monde(nom);
     }
 
+    /**
+     * Crée une pièce.
+     * 
+     * @param scanner Scanner.
+     * @throws NomDEntiteDejaUtiliseDansLeMondeException Erreur lors de la création
+     *                                                   de la pièce.
+     */
     private void creerPiece(Scanner scanner) throws NomDEntiteDejaUtiliseDansLeMondeException {
         String nomPiece = scanner.next();
         new Piece(nomPiece, this.monde);
     }
 
+    /**
+     * Crée une porte.
+     * 
+     * @param scanner     Scanner.
+     * @param avecSerrure Si la porte a une serrure.
+     * @throws NomDEntiteDejaUtiliseDansLeMondeException Erreur lors de la création
+     *                                                   de la porte.
+     */
     private void creerPorte(Scanner scanner, boolean avecSerrure) throws NomDEntiteDejaUtiliseDansLeMondeException {
         Serrure serrure = null;
         if (avecSerrure) {
@@ -100,6 +160,11 @@ public class Simulateur {
         }
     }
 
+    /**
+     * Crée une clef.
+     * 
+     * @param scanner Scanner.
+     */
     private void creerClef(Scanner scanner) {
         Porte porte = (Porte) this.monde.getEntite(scanner.next());
 
@@ -110,6 +175,13 @@ public class Simulateur {
         piece.deposer(clef);
     }
 
+    /**
+     * Crée un joueur humain.
+     * 
+     * @param scanner Scanner.
+     * @throws NomDEntiteDejaUtiliseDansLeMondeException Erreur lors de la création
+     *                                                   du joueur.
+     */
     private void creerJoueurHumain(Scanner scanner) throws NomDEntiteDejaUtiliseDansLeMondeException {
         String nom = scanner.next();
         int pointVie = scanner.nextInt();
@@ -119,36 +191,121 @@ public class Simulateur {
         new JoueurHumain(nom, this.monde, pointVie, pointForce, piece);
     }
 
-    public Simulateur(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        this.monde = (Monde) ois.readObject();
-        this.conditionsDeFin = (List<ConditionDeFin>) ois.readObject();
+    /**
+     * Constructeur Simulateur.
+     * 
+     * @param flux Flux dans lequel lire le simulateur.
+     * @throws IOException            Erreur lors de la lecture.
+     * @throws ClassNotFoundException Erreur lors de la lecture.
+     */
+    public Simulateur(ObjectInputStream flux) throws IOException, ClassNotFoundException {
+        this.monde = (Monde) flux.readObject();
+        this.conditionsDeFin = (List<ConditionDeFin>) flux.readObject();
     }
 
-    public void enregistrer(ObjectOutputStream oos) throws IOException {
-        oos.writeObject(this.monde);
-        oos.writeObject(this.conditionsDeFin);
+    /**
+     * Enregistre le simulateur dans un fichier.
+     * 
+     * @param flux Flux dans lequel enregistrer le simulateur.
+     * @throws IOException Erreur lors de l'enregistrement.
+     */
+    public void enregistrer(ObjectOutputStream flux) throws IOException {
+        flux.writeObject(this.monde);
+        flux.writeObject(this.conditionsDeFin);
     }
 
+    /**
+     * Ajoute une condition de fin.
+     * 
+     * @param conditionDeFin Condition de fin à ajouter.
+     */
     public void ajouterConditionDeFin(ConditionDeFin conditionDeFin) {
         this.conditionsDeFin.add(conditionDeFin);
     }
 
+    /**
+     * Ajoute des conditions de fin.
+     * 
+     * @param conditionsDeFin Conditions de fin à ajouter.
+     */
     public void ajouterConditionsDeFin(Collection<ConditionDeFin> conditionsDeFin) {
         this.conditionsDeFin.addAll(conditionsDeFin);
     }
 
+    /**
+     * Retourne l'état du jeu.
+     * 
+     * @return Etat du jeu (gagné, perdu ou en cours).
+     */
     public EtatDuJeu getEtatDuJeu() {
+        // On vérifie les conditions de fin
         for (ConditionDeFin conditionDeFin : this.conditionsDeFin) {
-            // TODO
+            EtatDuJeu etat = conditionDeFin.verifierEtatDuJeu();
+            // Si une condition de fin est vérifiée (!= en cours), on retourne l'état du jeu
+            // (gagné ou perdu)
+            if (etat != EtatDuJeu.ENCOURS) {
+                System.out.println("Etat du jeu : " + etat);
+                System.out.println("Cause : " + conditionDeFin);
+                return etat;
+
+            }
         }
+        // Sinon, on retourne que le jeu est en cours
         return EtatDuJeu.ENCOURS;
     }
 
+    /**
+     * Exécute un tour.
+     * 
+     * @return Etat du jeu.
+     * @throws Throwable Erreur lors de l'exécution.
+     */
     public EtatDuJeu executerUnTour() throws Throwable {
-        // TODO
+        // On récupère les exécutables
+        Collection<Executable> executables = monde.getExecutables();
+
+        // On demande les ordres aux joueurs
+        for (Executable executable : executables) {
+            // On vérifie si l'entité est un joueur humain
+            if (executable instanceof JoueurHumain) {
+                // On transtype l'entité en joueur humain
+                JoueurHumain joueur = (JoueurHumain) executable;
+                // Affichage des informations du joueur
+                System.out
+                        .println(String.format(
+                                "Joueur %s \n\t- Points de vie : %d\n\t- Points de force : %d\n\t- Objets : %s",
+                                joueur.getNom(),
+                                joueur.getPointVie(), joueur.getPointForce(), joueur.getObjets().toString()));
+         
+                // Affichage de la pièce
+                System.out.println(String.format("\t- Piece %s :\n\t\t- Objets : %s\n\t\t- Portes : %s", joueur.getPiece().getNom(), joueur.getPiece().getObjets().toString(), joueur.getPiece().getPortes().toString()));
+         
+                                // Demande de la commande
+                System.out.println("Entrez une commande : ");
+
+                // On lit la commande de l'utilisateur et on la (readln et decompose)
+                Scanner scanner = new Scanner(System.in);
+
+                // On récupère la commande et on l'envoie au joueur
+                joueur.setOrdre(scanner.nextLine());
+            }
+        }
+
+        // On exécute les entités
+        for (Executable executable : executables) {
+            executable.executer();
+        }
+
         return this.getEtatDuJeu();
     }
 
+    /**
+     * Exécute un nombre de tours.
+     * 
+     * @param nbTours Nombre de tours à exécuter.
+     * @return Etat du jeu.
+     * @throws Throwable Erreur lors de l'exécution.
+     */
     public EtatDuJeu executerNbTour(int nbTours) throws Throwable {
         for (int i = 0; i < nbTours; i++) {
             EtatDuJeu etatDuJeu = this.executerUnTour();
@@ -159,17 +316,45 @@ public class Simulateur {
         return EtatDuJeu.ENCOURS;
     }
 
+    /**
+     * Exécute jusqu'à la fin.
+     * 
+     * @return Etat du jeu.
+     * @throws Throwable Erreur lors de l'exécution.
+     */
     public EtatDuJeu executerJusquaFin() throws Throwable {
-        this.continuer = true;
-        EtatDuJeu etatDuJeu = EtatDuJeu.ENCOURS;
-        while (etatDuJeu == EtatDuJeu.ENCOURS && this.continuer) {
-            etatDuJeu = this.executerUnTour();
+        EtatDuJeu etatDuJeu = this.getEtatDuJeu();
+        while (etatDuJeu == EtatDuJeu.ENCOURS) {
+            boolean continuer = true;
+            while (continuer) {
+                // On exécute un tour
+                try {
+                    etatDuJeu = this.executerUnTour();
+                    continuer = false;
+                } catch (Throwable e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            
+            // On vérifie si le joueur veut continuer
+            continuer = true;
+            while (continuer) {
+                System.out.println("Voulez-vous continuer ? (o/n)");
+
+                Scanner scanner = new Scanner(System.in);
+                switch (scanner.next().toLowerCase()) {
+                    case "o":
+                        continuer = false;
+                        break;
+                    case "n":
+                        return etatDuJeu;
+                    default:
+                        System.out.println("Veuillez entrer o ou n");
+                }
+            }
+
         }
         return etatDuJeu;
-    }
-
-    public void stopper() {
-        this.continuer = false;
     }
 
     @Override
