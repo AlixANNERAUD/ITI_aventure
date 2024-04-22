@@ -1,16 +1,25 @@
 package fr.insarouen.iti.prog.itiaventure;
 
-import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
-import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
-import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
-import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 import fr.insarouen.iti.prog.itiaventure.elements.objets.Objet;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Piece;
 import fr.insarouen.iti.prog.itiaventure.elements.structure.Porte;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
+import fr.insarouen.iti.prog.itiaventure.Monde;
 
-import 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+
 public class TestConditionDeFinVivantMort {
     private Monde monde1;
     private Monde monde2;
@@ -21,6 +30,8 @@ public class TestConditionDeFinVivantMort {
     private Vivant vivant2;
     private EtatDuJeu etat;
     private ConditionDeFin[] conditions;
+
+
     @Before 
     public void avantTest() {
         this.monde1 = new Monde("monde1");
@@ -63,4 +74,17 @@ public class TestConditionDeFinVivantMort {
         ConditionDeFinConjonctionDeConditionDeFin(this.etat,conditions);
         assertThat(verifierEtatDuJeu().equals(this.etat), is(true));
     }
+    @After 
+    public void apresTest() {
+        this.monde1 = null;
+        this.monde2 = null;
+        this.piece1 = null;
+        this.piece2 = null;
+        this.porte = null;
+        this.vivant1 = null;
+        this.vivant2 =null;
+        this.etat = null;
+    }
+
+
 }
