@@ -43,7 +43,7 @@ public class ConditionDeFinVivantPossedeObjets extends ConditionDeFin {
         StringBuilder sb = new StringBuilder();
         for (Objet objet : this.objets) {
             sb.append(objet.getNom());
-            sb.append("\n");
+            sb.append(", ");
         }
 
         return String.format("Vivant possede objets: %s", sb.toString());

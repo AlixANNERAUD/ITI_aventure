@@ -16,10 +16,10 @@ public class Serrure extends Objet implements Activable {
     private static int compteur = 0;
 
     public static String getIdentifiant(Monde monde, String prefixe) {
-        while (monde.getEntite(String.format("%s %d", prefixe, compteur)) != null) {
+        while (monde.getEntite(String.format("%s_%d", prefixe, compteur)) != null) {
             compteur++;
         }
-        return String.format("%s %d", prefixe, compteur);
+        return String.format("%s_%d", prefixe, compteur);
     }
 
     public Serrure(Monde monde) throws NomDEntiteDejaUtiliseDansLeMondeException {
@@ -51,7 +51,7 @@ public class Serrure extends Objet implements Activable {
     }
 
     public void activer() throws ActivationException {
-        throw new ActivationImpossibleException();
+        throw new ActivationImpossibleException("La serrure ne peut pas être activée sans objet");
     }
 
     public void activerAvec(Objet objet) throws ActivationException {
@@ -60,18 +60,18 @@ public class Serrure extends Objet implements Activable {
                 if (this.activableAvec(objet)) {
                     this.etat = Etat.DEVEROUILLE;
                  } else {
-                    throw new ActivationImpossibleAvecObjet();
+                    throw new ActivationImpossibleAvecObjet("La clef ne correspond pas à la serrure");
                 }
                 break;
             case Etat.DEVEROUILLE:
                 if (this.activableAvec(objet)) {
                     this.etat = Etat.VERROUILLE;
                 } else {
-                    throw new ActivationImpossibleAvecObjet();
+                    throw new ActivationImpossibleAvecObjet("La clef ne correspond pas à la serrure");
                 }
                 break;
             default:
-                throw new ActivationImpossibleException(); // Ne doit pas arriver
+                throw new ActivationImpossibleException("La serrure ne peut pas être activée avec un objet"); // Normalement impossible
         }
     }
 

@@ -96,7 +96,7 @@ public class JoueurHumain extends Vivant implements Executable {
                     String.format("Commande impossible : %s", e.getCause().getMessage()));
         } catch (IllegalAccessException e) {
             throw new CommandeImpossiblePourLeVivantException(
-                    String.format("Commande impossible : %s", e.getMessage()));
+                    String.format("Commande illégale : %s", e.getMessage()));
         }
     }
 

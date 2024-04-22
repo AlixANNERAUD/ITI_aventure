@@ -245,7 +245,7 @@ public class Simulateur {
             // (gagné ou perdu)
             if (etat != EtatDuJeu.ENCOURS) {
                 System.out.println("Etat du jeu : " + etat);
-                System.out.println("Cause : " + conditionDeFin);
+                System.out.println("Cause : " + conditionDeFin.toString());
                 return etat;
 
             }

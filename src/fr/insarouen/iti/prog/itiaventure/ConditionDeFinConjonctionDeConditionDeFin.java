@@ -33,7 +33,7 @@ public class ConditionDeFinConjonctionDeConditionDeFin extends ConditionDeFin {
         StringBuilder sb = new StringBuilder();
         for (ConditionDeFin c : this.conditions) {
             sb.append(c.toString());
-            sb.append("\n");
+            sb.append(", ");
         }
         return String.format("Conjonction de conditions de fin: %s", sb.toString());
     }

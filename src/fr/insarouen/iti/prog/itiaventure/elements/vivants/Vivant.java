@@ -211,6 +211,7 @@ public class Vivant extends Entite {
                 throw new PorteFermeException("La porte est verrouillée");
             case Etat.FERME:
                 throw new PorteFermeException("La porte est fermée");
+            case Etat.CASSE:
             case Etat.OUVERT:
                 try {
                     this.piece.sortir(this);

@@ -75,31 +75,28 @@ public class Main {
      */
     private static void jouer() {
         if (Main.simulateur == null) {
-            System.out.println("❌ Veuillez charger une description avant de jouer");
+            System.out.println("❌ Veuillez charger une description avant de jouer.");
             return;
         }
 
         EtatDuJeu etat = EtatDuJeu.ENCOURS;
         do {
-
-            while (true) {
-                try {
-                    etat = Main.simulateur.executerUnTour();
-                    if (!etat.equals(EtatDuJeu.ENCOURS)) {
-                        Main.simulateur = null;
-                        return;
-                    }
-                    break;
-                } catch (Throwable e) {
-                    System.out.println(e.getMessage());
-                }
+            try {
+                etat = Main.simulateur.executerUnTour();
+            } catch (Throwable e) {
+                System.out.println(String.format("❌ %s", e.getMessage()));
             }
 
-        } while (Main.demandeContinuer());
+        } while (Main.demandeContinuer() && etat.equals(EtatDuJeu.ENCOURS));
+
+        if (!etat.equals(EtatDuJeu.ENCOURS)) {
+            Main.simulateur = null;
+        }
     }
 
     /**
      * Charge un fichier de description
+     * 
      * @param fichier Chemin du fichier
      */
     private static void chargerDescription(String fichier) {
@@ -107,19 +104,25 @@ public class Main {
             FileReader file = new FileReader(fichier);
             Main.simulateur = new Simulateur(file);
             file.close();
-            System.out.println("✅ Description chargée");
+            System.out.println("✅ Description chargée.");
         } catch (FileNotFoundException e) {
-            System.out.println("❌ Fichier de description introuvable");
+            System.out.println("❌ Fichier de description introuvable.");
         } catch (IOException e) {
-            System.out.println("❌ Erreur lors de la lecture du fichier de description");
+            System.out.println("❌ Erreur lors de la lecture du fichier de description.");
         }
     }
 
     /**
      * Sauvegarde la partie actuelle
+     * 
      * @param fichier Chemin du fichier
      */
     private static void sauvegarder(String fichier) {
+        if (Main.simulateur == null) {
+            System.out.println("❌ Aucune partie en cours.");
+            return;
+        }
+        
         try {
             FileOutputStream file = new FileOutputStream(fichier);
             Main.simulateur.enregistrer(new ObjectOutputStream(file));
@@ -132,6 +135,7 @@ public class Main {
 
     /**
      * Charge une partie sauvegardée
+     * 
      * @param fichier Chemin du fichier
      */
     private static void chargerSauvegarde(String fichier) {
@@ -139,9 +143,9 @@ public class Main {
             FileInputStream file = new FileInputStream(fichier);
             Main.simulateur = new Simulateur(new ObjectInputStream(file));
             file.close();
-            System.out.println("✅ Partie chargée");
+            System.out.println("✅ Partie chargée.");
         } catch (FileNotFoundException e) {
-            System.out.println("❌ Fichier de sauvegarde introuvable");
+            System.out.println("❌ Fichier de sauvegarde introuvable.");
         } catch (Exception e) {
             System.out.println("❌ Erreur lors de la lecture du fichier de sauvegarde : " + e.getMessage());
         }
@@ -149,6 +153,7 @@ public class Main {
 
     /**
      * Demande à l'utilisateur s'il veut continuer
+     * 
      * @return true si l'utilisateur veut continuer, false sinon
      */
     private static boolean demandeContinuer() {

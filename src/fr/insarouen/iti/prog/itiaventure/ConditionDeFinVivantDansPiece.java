@@ -38,6 +38,6 @@ public class ConditionDeFinVivantDansPiece extends ConditionDeFin {
 
     @Override
     public String toString() {
-        return String.format("Vivant dans piece: %s", this.piece);
+        return String.format("Vivant dans piece: %s", this.piece.getNom());
     }
 }
