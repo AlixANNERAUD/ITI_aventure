@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ AllTestElements.class, TestMonde.class })
+@SuiteClasses({ AllTestElements.class, TestMonde.class, TestConditionDeFinVivantMort.class })
 
 public class AllTests {
 

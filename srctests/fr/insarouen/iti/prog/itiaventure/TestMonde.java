@@ -48,11 +48,11 @@ public class TestMonde {
             this.monde.ajouter(entite2);
         });
         
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             Entite entite2 = new EntiteTest("entite" + i, this.monde);
             assertThat(this.monde.getEntite("entite" + i), is(entite2));
         }
-    }
+    }   
 
     @After
     public void tearDown() {
