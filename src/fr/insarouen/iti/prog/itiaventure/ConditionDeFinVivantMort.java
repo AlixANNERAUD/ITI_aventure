@@ -1,6 +1,5 @@
 package fr.insarouen.iti.prog.itiaventure;
 
-import fr.insarouen.iti.prog.itiaventure.elements.Etat;
 import fr.insarouen.iti.prog.itiaventure.elements.vivants.Vivant;
 
 public class ConditionDeFinVivantMort extends ConditionDeFin {
