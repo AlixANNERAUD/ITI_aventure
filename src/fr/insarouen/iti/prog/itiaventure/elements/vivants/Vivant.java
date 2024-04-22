@@ -202,7 +202,7 @@ public class Vivant extends Entite {
         Porte porte = this.piece.getPorte(nomPorte);
         if (porte == null) {
             throw new PorteInexistanteDansLaPieceException(
-                    String.format("La porte %s n'existe pas dans la pièce %s", nomPorte, this.piece.getNom()));
+                    String.format("La porte \"%s\" n'existe pas dans la pièce \"%s\"", nomPorte, this.piece.getNom()));
         }
         Etat etat = porte.getEtat();
 

@@ -1,5 +1,7 @@
 package fr.insarouen.iti.prog.itiaventure.elements;
 
+import java.io.Serializable;
+
 import fr.insarouen.iti.prog.itiaventure.EntiteDejaDansUnAutreMondeException;
 import fr.insarouen.iti.prog.itiaventure.Monde;
 import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeException;
@@ -7,7 +9,7 @@ import fr.insarouen.iti.prog.itiaventure.NomDEntiteDejaUtiliseDansLeMondeExcepti
 /**
  * Classe générique pour les entités.
  */
-public abstract class Entite {
+public abstract class Entite implements Serializable {
 
     /**
      * Monde dans lequel se trouve l'entité.

@@ -1,5 +1,6 @@
 package fr.insarouen.iti.prog.itiaventure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import fr.insarouen.iti.prog.itiaventure.elements.vivants.JoueurHumain;
 /**
  * Classe représentant un monde.
  */
-public class Monde {
+public class Monde implements Serializable {
 
    /**
     * Tableau des entités du monde.

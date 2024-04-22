@@ -151,6 +151,7 @@ public class Piece extends ElementStructurel {
         return this.vivants.values();
     }
 
+    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Piece: %s\n%s\n%s\n%s", this.getNom(), this.objets.toString(), this.vivants.toString(), this.portes.toString()));
@@ -167,6 +168,12 @@ public class Piece extends ElementStructurel {
         return this.sortir(vivant.getNom());
     }
 
+    /**
+     * Cette méthode sort un vivant de la pièce.
+     * @param nomVivant Nom du vivant à sortir
+     * @return Le vivant qui à été sorti, null si non trouvé.
+     * @throws VivantAbsentDeLaPieceException Si le vivant n'est pas dans la pièce.
+     */
     public Vivant sortir(String nomVivant) throws VivantAbsentDeLaPieceException {
         Vivant vivant = this.vivants.remove(nomVivant);
 

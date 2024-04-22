@@ -271,17 +271,30 @@ public class Simulateur {
                 // On transtype l'entité en joueur humain
                 JoueurHumain joueur = (JoueurHumain) executable;
                 // Affichage des informations du joueur
+                StringBuilder objetsJoueur = new StringBuilder();
+                joueur.getObjets().forEach(objet -> objetsJoueur.append(objet.getNom()).append(", "));
+
                 System.out
                         .println(String.format(
-                                "Joueur %s \n\t- Points de vie : %d\n\t- Points de force : %d\n\t- Objets : %s",
+                                "👨 %s - 💓 %d - 💪 %d \n - 📥 : %s",
                                 joueur.getNom(),
-                                joueur.getPointVie(), joueur.getPointForce(), joueur.getObjets().toString()));
-         
+                                joueur.getPointVie(), joueur.getPointForce(), objetsJoueur.toString()));
+
                 // Affichage de la pièce
-                System.out.println(String.format("\t- Piece %s :\n\t\t- Objets : %s\n\t\t- Portes : %s", joueur.getPiece().getNom(), joueur.getPiece().getObjets().toString(), joueur.getPiece().getPortes().toString()));
-         
-                                // Demande de la commande
-                System.out.println("Entrez une commande : ");
+                StringBuilder objetsPiece = new StringBuilder();
+                joueur.getPiece().getObjets().forEach(objet -> objetsPiece.append(objet.getNom()).append(", "));
+
+                StringBuilder portesPiece = new StringBuilder();
+                joueur.getPiece().getPortes()
+                        .forEach(porte -> portesPiece.append(String.format("%s (%s), ", porte.getNom(),
+                                porte.getEtat().toString())));
+
+                System.out.println(String.format(" - 🗺️  %s\n  - 📥 : %s\n  - 🚪 : %s",
+                        joueur.getPiece().getNom(), objetsPiece.toString(),
+                        portesPiece.toString()));
+
+                // Demande de la commande
+                System.out.print("❓ Entrez une commande : ");
 
                 // On lit la commande de l'utilisateur et on la (readln et decompose)
                 Scanner scanner = new Scanner(System.in);
@@ -325,34 +338,8 @@ public class Simulateur {
     public EtatDuJeu executerJusquaFin() throws Throwable {
         EtatDuJeu etatDuJeu = this.getEtatDuJeu();
         while (etatDuJeu == EtatDuJeu.ENCOURS) {
-            boolean continuer = true;
-            while (continuer) {
-                // On exécute un tour
-                try {
-                    etatDuJeu = this.executerUnTour();
-                    continuer = false;
-                } catch (Throwable e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            
-            // On vérifie si le joueur veut continuer
-            continuer = true;
-            while (continuer) {
-                System.out.println("Voulez-vous continuer ? (o/n)");
-
-                Scanner scanner = new Scanner(System.in);
-                switch (scanner.next().toLowerCase()) {
-                    case "o":
-                        continuer = false;
-                        break;
-                    case "n":
-                        return etatDuJeu;
-                    default:
-                        System.out.println("Veuillez entrer o ou n");
-                }
-            }
-
+            // On exécute un tour
+            etatDuJeu = this.executerUnTour();
         }
         return etatDuJeu;
     }

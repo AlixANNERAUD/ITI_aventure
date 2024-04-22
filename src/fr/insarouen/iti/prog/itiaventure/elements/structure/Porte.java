@@ -144,6 +144,7 @@ public class Porte extends ElementStructurel implements Activable {
         }
     }
 
+    @Override
     public String toString() {
         return String.format("Porte: %s - %s", this.getNom(), this.etat);
     }

@@ -43,6 +43,10 @@ public class Coffre extends Objet implements Activable {
         return false;
     }
 
+    /**
+     * Retourne l'état du coffre
+     * @return l'état du coffre
+     */
     public Etat getEtat() {
         return etat;
     }
