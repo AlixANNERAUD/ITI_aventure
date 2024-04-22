@@ -56,10 +56,12 @@ public abstract class Entite implements Serializable {
         return this.monde;
     }
 
+    @Override
     public String toString() {
         return String.format("Entite : %s", nom);
     }
 
+    @Override
     public boolean equals(Object o) {
         if ((o == null) || (this.getClass() != o.getClass())) {
             return false;
@@ -68,6 +70,7 @@ public abstract class Entite implements Serializable {
         return this.nom == e.nom && this.monde == e.monde;
     }
 
+    @Override
     public int hashCode() {
         return 13 * this.nom.hashCode() + 17 * this.monde.hashCode();
     }
