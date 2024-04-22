@@ -1,0 +1,17 @@
+Monde LeMondeImpitoyabledITI
+Piece BureauDesNicolas
+Piece BureauDuDirecteur
+Piece BureauDeClement
+Piece BureauDeLaurent
+Piece Couloir
+PorteSerrure Porte1 Couloir BureauDesNicolas
+PorteSerrure Porte2 Couloir BureauDuDirecteur
+Porte Porte3 Couloir BureauDeClement
+Porte Porte4 Couloir BureauDeLaurent
+Porte Trappe BureauDeClement BureauDuDirecteur
+Porte PassageSecret BureauDesNicolas BureauDeLaurent
+Clef Porte1 BureauDeClement
+Clef Porte2 BureauDeLaurent
+JoueurHumain Etudiant1 10 10 Couloir
+ConditionDeFinVivantDansPiece SUCCES Etudiant1 BureauDesNicolas
+ConditionDeFinVivantDansPiece ECHEC Etudiant1 BureauDuDirecteur
