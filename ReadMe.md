@@ -1,4 +1,4 @@
-<h1 align="center">ITI aventure🗺️</h1>
+<h1 align="center">🗺️ ITI aventure 🗺️</h1>
 
 ## 🚀 Introduction
 
